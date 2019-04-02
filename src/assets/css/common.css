@@ -1,0 +1,43 @@
+/*
+* @Author: name
+* @Date:   2019-04-01 09:39:39
+* @Last Modified by:   name
+* @Last Modified time: 2019-04-01 15:43:35
+*/
+
+/*登录注册*/
+.wrapper-login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.el-form{
+  margin-top: 2rem;
+}
+.el-input__inner{
+    border: 1px solid #545762;
+    background: none;
+}
+
+.footer-wrapper{
+    font-size: 24px;
+    letter-spacing:4px;
+    padding-bottom: 2rem;
+}
+
+/**/
+.title{color:#fff;overflow:hidden;}
+.title .mTitle{font-size: 30px;}
+.title .sTitle{font-size: 16px;color:#888;margin-top:24px;}
+.title .line{width:100px;height:2px;background-color:#fff;margin:0 auto;}
+
+.el-button{
+  background: linear-gradient(-45deg, #3265FB 0%, #14ACFF 100%);
+  color:#fff;
+}
+
+.el-button:focus, .el-button:hover{
+    color:#ccc;
+    background: transparent;
+}
