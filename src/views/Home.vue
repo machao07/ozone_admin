@@ -1,14 +1,14 @@
 <template>
-    <div id="app">
-        <el-container>
-            <Header></Header>
-            <el-main>
-                <router-view></router-view>
-            </el-main>
-            <div class="bg"></div>
-            <Footer></Footer>
-        </el-container>
-    </div>
+    <!-- <div id="app"> -->
+    <el-container>
+        <Header></Header>
+        <el-main>
+            <router-view></router-view>
+        </el-main>
+        <div class="bg"></div>
+        <Footer></Footer>
+    </el-container>
+    <!-- </div> -->
 </template>
 
 <script>
