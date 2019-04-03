@@ -1,5 +1,5 @@
 <template>
-  <section style="max-width:1200px;width:100%;margin:0 auto;padding-bottom:100px;">
+  <section class="container">
     <div class="title">
       <p class="mTitle animated fadeInUpBig" style="animation-duration: 1s;">智能合约检测</p>
       <div class="line animated fadeInUpBig" style="animation-delay: 0.3s;"></div>
@@ -9,9 +9,9 @@
     <!--工具条-->
       <el-form :inline="true">
         <el-row :span="24">
-          <el-col :span="12" style="text-align:left">
+          <el-col :span="12" class="animated bounceInLeft" style="text-align:left">
             <el-form-item>
-                <el-button type="" icon="el-icon-upload">上传文件</el-button>
+                <el-button type="" icon="el-icon-upload">{{$t('testing.from.upLoad')}}</el-button>
             </el-form-item>
 
             <el-form-item>
@@ -19,7 +19,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="12" style="text-align:right">
+          <el-col :span="12" class="animated bounceInRight" style="text-align:right">
             <el-form-item>
               <el-input placeholder="搜素" style="width:300px;"></el-input>
             </el-form-item>

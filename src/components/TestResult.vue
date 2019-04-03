@@ -1,5 +1,5 @@
 <template>
-  <section style="max-width:1200px;width:100%;margin:0 auto;padding-bottom:100px;">
+  <section class="container">
     <div class="title">
       <p class="mTitle animated fadeInUpBig" style="animation-duration: 1s;">检测结果</p>
       <div class="line animated fadeInUpBig" style="animation-delay: 0.3s;"></div>

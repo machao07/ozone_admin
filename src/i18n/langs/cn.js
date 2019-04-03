@@ -26,6 +26,14 @@ const cn = {
   footer: {
     'msg': '© Copyright 2018 青岛墨一客区块链有限公司'
   },
+  testing: {
+    'title': '智能合约检测',
+    'subTitle': '添加智能合约地址，上传智能合约代码文件。',
+    from: {
+        'upLoad': '上传文件',
+        'addContract': '添加合约'
+    }
+  },
   ...enLocale
 }
 export default cn

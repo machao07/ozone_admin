@@ -3,15 +3,14 @@
         <el-col :span="4" class="logo"><img src="../assets/images/ozone_logo.png" width="110" alt=""></el-col>
         <el-col :span="14" :offset="6">
           <el-col :span="12">
-            <el-menu class="el-menu-demo" mode="horizontal" background-color="transparent" text-color="#fff" active-text-color="#ffd04b">
-              <el-menu-item index="1" default-active>{{$t('menu.home')}}</el-menu-item>
-              <el-menu-item index="2"><router-link :to="{name: 'Test'}">{{$t('menu.testing')}}</router-link></el-menu-item>
-              <el-menu-item index="3">{{$t('menu.monitor')}}</el-menu-item>
-              <el-menu-item index="4">{{$t('menu.track')}}</el-menu-item>
-              <el-menu-item index="5">{{$t('menu.reportTube')}}</el-menu-item>
+            <el-menu :default-active="$route.path" router class="el-menu-demo" mode="horizontal" background-color="transparent" text-color="#fff" active-text-color="#ffd04b">
+              <el-menu-item index="/" default-active>{{$t('menu.home')}}</el-menu-item>
+              <el-menu-item index="/Test">{{$t('menu.testing')}}</el-menu-item>
+              <el-menu-item index="/404">{{$t('menu.monitor')}}</el-menu-item>
+              <el-menu-item index="/404">{{$t('menu.track')}}</el-menu-item>
+              <el-menu-item index="/404">{{$t('menu.reportTube')}}</el-menu-item>
             </el-menu>
           </el-col>
-
 
           <el-col :span="4">
               <el-button size="small">
@@ -34,9 +33,6 @@
                 <el-dropdown-item command="en">English</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-              <!-- <span class="line">中文</span>
-              <span class="verticalLine"></span>
-              <span>English</span> -->
           </el-col>
 
         </el-col>
@@ -51,10 +47,16 @@
         }
       },
       mouted(){
-        const _lang = localStorage.lang || 'cn'
-        this.getLanguage(_lang)
+        const _lang = localStorage.lang || 'cn';
+        this.getLanguage(_lang);
+        let href  =window.location.href;
+        this.defaultUrl = href.split('')[1];
+      },
+      watch: {
+
       },
       methods:{
+        // 切换中英文
         handleSetLanguage (lang) {
           this.$i18n.locale = lang
           localStorage.setItem('lang', lang)
@@ -67,7 +69,7 @@
           if (val === 'en') {
             this.language = 'English'
           }
-        }
+        },
       }
     }
 </script>
@@ -82,7 +84,6 @@
     top: 0;
     z-index:2;
   }
-  .logo{margin-top:10px;}
   .el-menu.el-menu--horizontal{
     border-bottom: none;
   }
@@ -100,17 +101,6 @@
 
   .el-dropdown-link {
     cursor: pointer;
-    color: #409EFF;
-  }
-  .language span{
-    cursor:pointer;
-  }
-  .language span:hover{
-    color: #15a8ff;
-  }
-
-  .language .verticalLine{
-      border-left: 2px solid #fff;
-      margin: 0 8px;
+    color: #fff;
   }
 </style>

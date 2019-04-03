@@ -26,6 +26,14 @@ const en = {
   footer: {
     'msg': '© Copyright 2018 Qingdao Moyike Block Chain Co., Ltd.'
   },
+  testing: {
+    'title': 'Intelligent Contract Detection',
+    'subTitle': 'Add smart contract address and upload smart contract code file.',
+    from: {
+        'upLoad': 'Upload files',
+        'addContract': 'Add contract'
+    }
+  },
   ...enLocale
 }
 export default en

@@ -7,6 +7,7 @@
                 <p class="mTitle animated fadeInUpBig" style="animation-delay:0;animation-duration: 1s;">{{$t('homeMsg.title')}}</p>
                 <p class="sTitle animated fadeInUpBig" style="animation-delay:.5s;animation-duration: 1.2s;">{{$t('homeMsg.subTitle')}}</p>
             </div>
+            <router-view></router-view>
         </el-main>
         <div class="bg">
         </div>
@@ -56,7 +57,6 @@ body{font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","M
 }
 
 .el-main{margin:80px 0 40px 0;}
-
 
 .bg{
     width: 100%;
