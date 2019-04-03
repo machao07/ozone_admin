@@ -11,6 +11,7 @@ import animate from 'animate.css'
 import VueRouter from 'vue-router'
 import '../static/css/common.css'
 import VueModal from 'vue-js-modal'
+import i18n from './i18n/i18n'
 
 
 Vue.use(ElementUI)
@@ -39,6 +40,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  i18n,
   components: { App },
   template: '<App/>'
 })

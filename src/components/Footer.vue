@@ -1,5 +1,5 @@
 <template>
-    <el-footer>© Copyright 2018 青岛墨一客区块链有限公司</el-footer>
+    <el-footer>{{$t('footer.msg')}}</el-footer>
 </template>
 
 <style>

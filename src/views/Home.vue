@@ -4,8 +4,8 @@
         <Header></Header>
         <el-main>
             <div class="title">
-                <p class="mTitle animated fadeInUpBig" style="animation-delay:0;animation-duration: 1s;">区块链智能合约安全检测平台</p>
-                <p class="sTitle animated fadeInUpBig" style="animation-delay:.5s;animation-duration: 1.2s;">Blockchain Smart Contract Security Checking System</p>
+                <p class="mTitle animated fadeInUpBig" style="animation-delay:0;animation-duration: 1s;">{{$t('homeMsg.title')}}</p>
+                <p class="sTitle animated fadeInUpBig" style="animation-delay:.5s;animation-duration: 1.2s;">{{$t('homeMsg.subTitle')}}</p>
             </div>
         </el-main>
         <div class="bg">
