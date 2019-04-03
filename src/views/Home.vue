@@ -1,19 +1,14 @@
 <template>
-    <!-- <div class="app"> -->
-    <el-container>
-        <Header></Header>
-        <el-main>
-            <div class="title">
-                <p class="mTitle animated fadeInUpBig" style="animation-delay:0;animation-duration: 1s;">{{$t('homeMsg.title')}}</p>
-                <p class="sTitle animated fadeInUpBig" style="animation-delay:.5s;animation-duration: 1.2s;">{{$t('homeMsg.subTitle')}}</p>
-            </div>
-            <router-view></router-view>
-        </el-main>
-        <div class="bg">
-        </div>
-        <Footer></Footer>
-    </el-container>
-    <!-- </div> -->
+    <div id="app">
+        <el-container>
+            <Header></Header>
+            <el-main>
+                <router-view></router-view>
+            </el-main>
+            <div class="bg"></div>
+            <Footer></Footer>
+        </el-container>
+    </div>
 </template>
 
 <script>
@@ -21,7 +16,6 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
 export default {
-  name: 'Home',
   components:{
     'Header': Header,
     'Footer': Footer
@@ -50,12 +44,8 @@ body{font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","M
     color: #fff;
     position: relative;
     z-index: 1;
-    overflow:hidden;
+    overflow:auto;
 }
-.el-container{
-
-}
-
 .el-main{margin:80px 0 40px 0;}
 
 .bg{
@@ -65,6 +55,7 @@ body{font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","M
     background-size: 100% 100%;
     position: absolute;
     bottom: 150px;
+    z-index: -1;
 }
 
 </style>

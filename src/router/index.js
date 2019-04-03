@@ -6,6 +6,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
+import HomeContent from '@/components/HomeContent'
 import Test from '@/components/Test'
 import TestResult from '@/components/TestResult'
 
@@ -24,11 +25,10 @@ export default new Router({
           path: '/',
           name: 'Home',
           component: Home,
-          meta: {title: '智能合约检测平台首页'}
-
-          // children: [
-          //   {path: 'Test', name: 'Test', component: Test},
-          // ]
+          meta: {title: '智能合约检测平台首页'},
+          children: [
+              { path: '/HomeContent', component: HomeContent, name: 'HomeContent'}
+          ]
         },
         {
           path: '/Login',
@@ -43,16 +43,17 @@ export default new Router({
           meta: {title: '智能合约检测平台注册页面'}
         },
         {
-          path: '/Test',
-          name: 'Test',
-          component: Test,
-          meta: {title: '智能合约检测'}
+          path: '/',
+          name: 'Home',
+          component: Home,
+          children: [
+              { path: '/Test', component: Test, name: 'Test'}
+          ]
         },
         {
           path: '/TestResult',
           name: 'TestResult',
-          component: TestResult,
-          meta: {title: '智能合约检测结果'}
+          component: TestResult
         }
     ]
 })

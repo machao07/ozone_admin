@@ -1,9 +1,9 @@
 <template>
   <section class="container">
     <div class="title">
-      <p class="mTitle animated fadeInUpBig" style="animation-duration: 1s;">智能合约检测</p>
-      <div class="line animated fadeInUpBig" style="animation-delay: 0.3s;"></div>
-      <p class="sTitle animated fadeInUpBig" style="animation-delay: 0.5s; animation-duration: 1.2s;">添加智能合约地址，上传智能合约代码文件。</p>
+      <p class="mTitle animated fadeInUpBig">智能合约检测</p>
+      <div class="line animated fadeInUpBig" style="animation-delay: 0.1s;"></div>
+      <p class="sTitle animated fadeInUpBig" style="animation-delay: 0.2s; animation-duration: 1.2s;">添加智能合约地址，上传智能合约代码文件。</p>
     </div>
 
     <!--工具条-->
@@ -219,6 +219,8 @@
   .title .sTitle{
     font-size:14px;
   }
+
+  .el-form{margin-top: 5rem;}
   .tableLine{border: 1px solid #fff;border-radius:5px;padding: 10px 15px;margin:0 auto;max-width:1170px;width:100%;}
   .el-table{background-color: transparent;color: #b5bbc1;}
   .el-table::before{display: none;}
