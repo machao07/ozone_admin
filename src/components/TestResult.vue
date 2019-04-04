@@ -1,153 +1,156 @@
 <template>
-  <section class="container">
-    <div class="title">
-      <p class="mTitle animated fadeInUpBig" style="animation-duration: 1s;">检测结果</p>
-      <div class="line animated fadeInUpBig" style="animation-delay: 0.3s;"></div>
-    </div>
+  <div>
+    <Header></Header>
+    <section class="container">
+      <div class="title">
+        <p class="mTitle animated fadeInUpBig" style="animation-duration: 1s;">{{$t('testresult.title')}}</p>
+        <div class="line animated fadeInUpBig" style="animation-delay: 0.3s;"></div>
+      </div>
 
-    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-          <ul class="layui-tab-title">
-              <li class="layui-this">
-                <div>
-                  <p>1 security/enforce-explicit-visibility</p>
-                  <p class="text-warning">warning</p>
-                </div>
-                <div>
-                  <p>No visibility specified explicitly for totalSupply function</p>
-                  <p class="text-warning">line:19</p>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <p>2 security/enforce-explicit-visibility</p>
-                  <p class="text-warning">warning</p>
-                </div>
-                <div>
-                  <p>No visibility specified explicitly for totalSupply function</p>
-                  <p class="text-warning">line:19</p>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <p>3 security/enforce-explicit-visibility</p>
-                  <p class="text-warning">warning</p>
-                </div>
-                <div>
-                  <p>No visibility specified explicitly for totalSupply function</p>
-                  <p class="text-warning">line:19</p>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <p>4 security/enforce-explicit-visibility</p>
-                  <p class="text-warning">warning</p>
-                </div>
-                <div>
-                  <p>No visibility specified explicitly for totalSupply function</p>
-                  <p class="text-warning">line:19</p>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <p>5 security/enforce-explicit-visibility</p>
-                  <p class="text-warning">warning</p>
-                </div>
-                <div>
-                  <p>No visibility specified explicitly for totalSupply function</p>
-                  <p class="text-warning">line:19</p>
-                </div>
-              </li>
-          </ul>
-          <div class="layui-tab-content">
-              <div class="layui-tab-item layui-show">
-                <div style="position:relative;z-index: 3;">
-                      <textarea ref="mycode" id="code" name="code">
-                        pragma solidity ^0.4.18;
+      <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">
+                  <div>
+                    <p>1 security/enforce-explicit-visibility</p>
+                    <p class="text-warning">warning</p>
+                  </div>
+                  <div>
+                    <p>No visibility specified explicitly for totalSupply function</p>
+                    <p class="text-warning">line:19</p>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <p>2 security/enforce-explicit-visibility</p>
+                    <p class="text-warning">warning</p>
+                  </div>
+                  <div>
+                    <p>No visibility specified explicitly for totalSupply function</p>
+                    <p class="text-warning">line:19</p>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <p>3 security/enforce-explicit-visibility</p>
+                    <p class="text-warning">warning</p>
+                  </div>
+                  <div>
+                    <p>No visibility specified explicitly for totalSupply function</p>
+                    <p class="text-warning">line:19</p>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <p>4 security/enforce-explicit-visibility</p>
+                    <p class="text-warning">warning</p>
+                  </div>
+                  <div>
+                    <p>No visibility specified explicitly for totalSupply function</p>
+                    <p class="text-warning">line:19</p>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <p>5 security/enforce-explicit-visibility</p>
+                    <p class="text-warning">warning</p>
+                  </div>
+                  <div>
+                    <p>No visibility specified explicitly for totalSupply function</p>
+                    <p class="text-warning">line:19</p>
+                  </div>
+                </li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                  <div style="position:relative;z-index: 3;">
+                        <textarea ref="mycode" id="code" name="code">
+                          pragma solidity ^0.4.18;
 
-                        /**
-                         * Math operations with safety checks
-                         */
-                        contract SafeMath {
-                          function safeMul(uint256 a, uint256 b) internal pure returns (uint256) {
-                            if (a == 0) {
-                              return 0;
+                          /**
+                          * Math operations with safety checks
+                          */
+                          contract SafeMath {
+                            function safeMul(uint256 a, uint256 b) internal pure returns (uint256) {
+                              if (a == 0) {
+                                return 0;
+                              }
+                              uint256 c = a * b;
+                              assert(c / a == b);
+                              return c;
                             }
-                            uint256 c = a * b;
-                            assert(c / a == b);
-                            return c;
+
+                            function safeDiv(uint256 a, uint256 b) internal pure returns (uint256) {
+                              assert(b > 0);
+                              uint256 c = a / b;
+                              assert(a == b * c + a % b);
+                              return c;
+                            }
+
+                            function safeSub(uint256 a, uint256 b) internal pure returns (uint256) {
+                              assert(b <= a);
+                              return a - b;
+                            }
+
+                            function safeAdd(uint256 a, uint256 b) internal pure returns (uint256) {
+                              uint256 c = a + b;
+                              assert(c>=a && c>=b);
+                              return c;
+                            }
                           }
 
-                          function safeDiv(uint256 a, uint256 b) internal pure returns (uint256) {
-                            assert(b > 0);
-                            uint256 c = a / b;
-                            assert(a == b * c + a % b);
-                            return c;
+                          contract Token is SafeMath{
+
+                              function balanceOf(address _owner) public constant returns (uint256 balance);
+
+                              function transfer(address _to, uint256 _value) public returns (bool success);
+
+                              function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
+
+                              function approve(address _spender, uint256 _value) public returns (bool success);
+
+                              function allowance(address _owner, address _spender) public constant returns (uint256 remaining);
+
+                              event Transfer(address indexed _from, address indexed _to, uint256 _value);
+
+                              event Approval(address indexed _owner, address indexed _spender, uint256 _value);
                           }
 
-                          function safeSub(uint256 a, uint256 b) internal pure returns (uint256) {
-                            assert(b <= a);
-                            return a - b;
+                          function balanceOf(address _owner) public constant returns (uint256 balance) {
+                              return balances[_owner];
                           }
 
-                          function safeAdd(uint256 a, uint256 b) internal pure returns (uint256) {
-                            uint256 c = a + b;
-                            assert(c>=a && c>=b);
-                            return c;
+                          /* Allow another contract to spend some tokens in your behalf */
+                          //允许_spender多次取用帐户，最高达_value金额
+                          function approve(address _spender, uint256 _value) public returns (bool success)
+                          {
+                              allowed[msg.sender][_spender] = _value;
+                              Approval(msg.sender, _spender, _value);
+                              return true;
                           }
-                        }
 
-                        contract Token is SafeMath{
+                          function allowance(address _owner, address _spender) public constant returns (uint256 remaining) {
+                              return allowed[_owner][_spender];       //查询并返回_spender仍然被允许从_owner提取的金额，即授权余额
+                          }
 
-                            function balanceOf(address _owner) public constant returns (uint256 balance);
-
-                            function transfer(address _to, uint256 _value) public returns (bool success);
-
-                            function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
-
-                            function approve(address _spender, uint256 _value) public returns (bool success);
-
-                            function allowance(address _owner, address _spender) public constant returns (uint256 remaining);
-
-                            event Transfer(address indexed _from, address indexed _to, uint256 _value);
-
-                            event Approval(address indexed _owner, address indexed _spender, uint256 _value);
-                        }
-
-                        function balanceOf(address _owner) public constant returns (uint256 balance) {
-                            return balances[_owner];
-                        }
-
-                        /* Allow another contract to spend some tokens in your behalf */
-                        //允许_spender多次取用帐户，最高达_value金额
-                        function approve(address _spender, uint256 _value) public returns (bool success)
-                        {
-                            allowed[msg.sender][_spender] = _value;
-                            Approval(msg.sender, _spender, _value);
-                            return true;
-                        }
-
-                        function allowance(address _owner, address _spender) public constant returns (uint256 remaining) {
-                            return allowed[_owner][_spender];       //查询并返回_spender仍然被允许从_owner提取的金额，即授权余额
-                        }
-
-                        </textarea>
+                          </textarea>
+                  </div>
                 </div>
-              </div>
-              <div class="layui-tab-item">内容2</div>
-              <div class="layui-tab-item">内容3</div>
-              <div class="layui-tab-item">内容4</div>
-              <div class="layui-tab-item">内容5</div>
-          </div>
-    </div>
-
-  </section>
-
+                <div class="layui-tab-item">内容2</div>
+                <div class="layui-tab-item">内容3</div>
+                <div class="layui-tab-item">内容4</div>
+                <div class="layui-tab-item">内容5</div>
+            </div>
+      </div>
+    </section>
+    <Footer></Footer>
+  </div>
 </template>
-
 <script>
   import "codemirror/theme/ambiance.css";
   import "codemirror/lib/codemirror.css";
   import "codemirror/addon/hint/show-hint.css";
+  import Header from '@/components/Header'
+  import Footer from '@/components/Footer'
 
   let CodeMirror = require("codemirror/lib/codemirror");
   require("codemirror/mode/javascript/javascript");
@@ -158,7 +161,10 @@
   // require("codemirror/addon/hint/sql-hint");
 
   export default {
-    name: "codeMirror",
+    components:{
+    'Header': Header,
+    'Footer': Footer
+    },
     data() {
       return {
         tabPosition: 'left'
@@ -229,6 +235,8 @@
 }
 .layui-tab-title .layui-this:after{border: none;}
 .text-warning{color:#ffc107;}
+.text-success {color: #3bb001;}
+.text-danger {color: #dc3545;}
 
 /*滚动条样式*/
 .layui-tab-title::-webkit-scrollbar {/*滚动条整体样式*/

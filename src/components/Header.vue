@@ -1,7 +1,7 @@
 <template>
     <el-row :span="24" class="header">
         <el-col :span="4" class="logo"><img src="../assets/images/ozone_logo.png" width="110" alt=""></el-col>
-        <el-col :span="14" :offset="6">
+        <el-col :span="16" :offset="4">
           <el-col :span="12">
             <el-menu :default-active="$route.path" router class="el-menu-demo" mode="horizontal" background-color="transparent" text-color="#fff" active-text-color="#ffd04b">
               <el-menu-item index="/" default-active>{{$t('menu.home')}}</el-menu-item>

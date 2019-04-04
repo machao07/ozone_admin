@@ -24,7 +24,7 @@
               <el-input :placeholder="$t('testing.from.searchholder')" style="width:300px;"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="" v-on:click="" icon="el-icon-search">{{$t('testing.from.searchBtn')}}</el-button>
+              <el-button type="" @click="" icon="el-icon-search">{{$t('testing.from.searchBtn')}}</el-button>
             </el-form-item>
           </el-col>
 
@@ -33,7 +33,12 @@
 
       <!--列表-->
       <div class="tableLine">
-        <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" align="left" @selection-change="handleSelectionChange">
+        <el-table ref="multipleTable" v-loading="listLoading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0.6)"
+        :data="tableData" tooltip-effect="dark" align="left"
+        @selection-change="selsChange">
             <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column :label="$t('testing.List.num')" width="80">
               <template slot-scope="scope">{{ scope.row.num }}</template>
@@ -57,7 +62,7 @@
                   @click="handleDel(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.del')}}</el-button>
                 <el-button
                   size="mini" icon="el-icon-download"
-                  @click="handleEdit(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.download')}}</el-button>
+                  @click="handleDownload(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.download')}}</el-button>
               </template>
             </el-table-column>
         </el-table>
@@ -65,7 +70,7 @@
       <!--工具条-->
       <el-row :span="24" style="padding: 20px 0;">
         <el-col :span="12" class="toolbar" style="text-align:left;">
-          <el-button type="danger" @click="" :disabled="this.sels.length===0" style="text-align:left">{{$t('testing.from.allDel')}}</el-button>
+          <el-button @click="batchRemove" :disabled="this.sels.length===0" style="text-align:left">{{$t('testing.from.allDel')}}</el-button>
         </el-col>
         <el-col :span="12" style="text-align:left;">
           <el-pagination :span="12"  background layout="prev, pager, next" @current-change="" :page-size="7" :total="50" style="float:right;" >
@@ -140,7 +145,8 @@
           time: '2019-03-28 14:33:02',
           statue: '检测成功'
         }],
-        multipleSelection: []
+        multipleSelection: [],
+        listLoading: false
       }
     },
     mounted() {
@@ -162,15 +168,64 @@
       handleSelectionChange(val) {
         this.multipleSelection = val;
       },
+      selsChange(sels) {
+        this.sels = sels;
+      },
+      //批量删除
+      batchRemove() {
+        var ids = this.sels.map(item => item.id).toString();
+        this.$confirm('确认删除选中记录吗？', '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.listLoading = true;
+          //NProgress.start();
+          let para = { ids: ids };
+          batchRemoveUser(para).then((res) => {
+            this.listLoading = false;
+            //NProgress.done();
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            });
+            this.getUsers();
+          });
+        }).catch(() => {
 
+        });
+      },
+      //删除
+      handleDel(index, row) {
+        this.$confirm('确认删除该记录吗?', '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.listLoading = true;
+          //NProgress.start();
+          let para = { id: row.id };
+          removeUser(para).then((res) => {
+            this.listLoading = false;
+            //NProgress.done();
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            });
+            this.getUsers();
+          });
+        }).catch(() => {
+
+        });
+      },
+      handleDownload(){
+
+      },
+      //列表加载
       loadList(){
-        this.$ajax({
-          method: 'get',
-          dataType: 'json',
-          url: 'https://ozone.mozi.one/api/admin/system/file/getall?page=1&pageSize=10'
-        }).then(res => {
-            console.log(res.data)
-        })
+        // this.$ajax({
+        //   method: 'get',
+        //   dataType: 'json',
+        //   url: 'https://ozone.mozi.one/api/admin/system/file/getall?page=1&pageSize=10'
+        // }).then(res => {
+        //     console.log(res.data)
+        // })
       },
       //分页
       getContracts(page){
@@ -201,7 +256,12 @@
       },
       //查看
       handleSee(id) {
-        this.$router.push('TestResult')
+        let routeUrl = this.$router.resolve({
+             path: "/TestResult",
+             // query: {id:96}
+        });
+        window.open(routeUrl .href, '_blank');
+        // this.$router.push('/TestResult');
         // this.editFormVisible = true;
         // this.editForm = Object.assign({}, row);
       },

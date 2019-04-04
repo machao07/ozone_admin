@@ -2,55 +2,85 @@
 * @Author: name
 * @Date:   2019-04-01 09:39:39
 * @Last Modified by:   name
-* @Last Modified time: 2019-04-04 09:59:09
+* @Last Modified time: 2019-04-04 16:24:59
 */
 
-
-.header{
-  width:100%;
-  height: 60px;
-  line-height: 60px;
-  background: #081027;
-  position:fixed;
-  top: 0;
-  z-index:2;
+.header {
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    background: #081027;
+    position: fixed;
+    top: 0;
+    z-index: 2;
 }
+
+
 /*登录注册*/
-.wrapper-login{
+
+.wrapper-login {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.el-form{
-  margin-top: 2rem;
+.el-form {
+    margin-top: 2rem;
 }
-.el-input__inner{
+
+.el-input__inner {
     border: 1px solid #545762;
     background: none;
 }
 
-section.container{
-  max-width:1200px;width:100%;margin:0 auto;padding-bottom:100px;
+section.container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 80px auto 40px auto;
+    padding-bottom: 100px;
 }
-.footer-wrapper{
+
+.footer-wrapper {
     font-size: 24px;
-    letter-spacing:4px;
+    letter-spacing: 4px;
     padding-bottom: 2rem;
 }
 
-/**/
-.title{color:#fff;overflow:hidden;}
-.title .mTitle{font-size: 30px;margin:30px 0;}
-.title .sTitle{font-size: 16px;color:#888;margin-top:24px;}
-.title .line{width:100px;height:2px;background-color:#fff;margin:0 auto;}
 
-.el-button{
-  background: linear-gradient(-45deg, #3265FB 0%, #14ACFF 100%);
-  color:#fff;
+/**/
+
+.title {
+    color: #fff;
+    overflow: hidden;
 }
 
-.el-button:focus, .el-button:hover{
-    color:#ccc;
+.title .mTitle {
+    font-size: 30px;
+    margin: 30px 0;
+}
+
+.title .sTitle {
+    font-size: 16px;
+    color: #888;
+    margin-top: 24px;
+}
+
+.title .line {
+    width: 100px;
+    height: 2px;
+    background-color: #fff;
+    margin: 0 auto;
+}
+
+.el-button,
+.el-button:active,
+.el-button:focus {
+    background: linear-gradient(-45deg, #3265FB 0%, #14ACFF 100%);
+    color: #fff;
+}
+
+.el-button:link,
+.el-button:hover {
+    color: #ccc;
     background: transparent;
 }
