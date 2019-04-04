@@ -1,10 +1,21 @@
 <template>
+  <div>
+    <el-row :gutter="20" class="header">
+        <el-col :span="6" :offset="6" class="logo"><img src="../assets/images/ozone_logo.png" width="110" alt=""></el-col>
+        <el-col :span="6">
+            <Language></Language>
+        </el-col>
+    </el-row>
     <div class="wrapper-login">
         <div class="from-wrapper">
-            <h2><font size="5">系统注册</font></h2>
+            <h2><font size="5">{{$t('register.title')}}</font></h2>
             <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" class="demo-ruleForm">
-                <el-form-item prop="tel">
-                    <el-input v-model="ruleForm2.tel" auto-complete="off" placeholder="请输入邮箱"></el-input>
+                <el-form-item prop="account">
+                    <el-input v-model="ruleForm2.account" auto-complete="off" :placeholder="$t('register.accountholder')"></el-input>
+                </el-form-item>
+
+                <el-form-item prop="name">
+                    <el-input v-model="ruleForm2.name" auto-complete="off" :placeholder="$t('register.nameholder')"></el-input>
                 </el-form-item>
                 <!-- <el-form-item prop="smscode" class="code">
                     <el-col :span="16">
@@ -15,14 +26,16 @@
                     </el-col>
                 </el-form-item> -->
                 <el-form-item prop="pass">
-                    <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="输入密码"></el-input>
+                    <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" :placeholder="$t('register.passholder')"></el-input>
                 </el-form-item>
                 <el-form-item prop="checkPass">
-                    <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="确认密码"></el-input>
+                    <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" :placeholder="$t('register.passconfirm')"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm2')" style="width:100%;">注册</el-button>
-                    <p class="login" @click="gotoLogin">已有账号？<router-link :to="{name: 'Login'}">立即登录</router-link></p>
+                    <el-button type="primary" @click="submitForm('ruleForm2')" style="width:100%;">{{$t('register.btn')}}</el-button>
+                </el-form-item>
+                <el-form-item>
+                    <p class="login" @click="gotoLogin">{{$t('register.subtitle1')}}<router-link :to="{name: 'Login'}"><font color="#1E95FE">{{$t('register.subtitle2')}}</font></router-link></p>
                 </el-form-item>
             </el-form>
             <div class="footer-wrapper">
@@ -30,11 +43,16 @@
             </div>
         </div>
     </div>
+  </div>
 </template>
 
 <script>
+import Language from '@/components/Language'
 export default {
   name: "Register",
+  components:{
+    'Language': Language
+  },
   data() {
     // <!--验证手机号是否合法-->
     let checkTel = (rule, value, callback) => {

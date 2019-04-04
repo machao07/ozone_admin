@@ -4,13 +4,23 @@ const cn = {
     'btn': '登录',
     'username': '用户名',
     'password': '密码',
-    'signin': '登录',
+    'title': '系统登录',
+    'nameholder': '请输入账号',
+    'passholder': '请输入密码',
+    'subtitle1': '还没有账号？',
+    'subtitle2': '立即注册'
   },
   register: {
     'btn': '注册',
     'name': '姓名',
     'password': '密码',
-    'ConfirmPassword': '确认密码'
+    'title': '系统注册',
+    'accountholder': '请输入您的账号',
+    'nameholder': '请输入您的姓名',
+    'passholder': '请输入密码',
+    'passconfirm': '请确认密码',
+    'subtitle1': '已有账号？',
+    'subtitle2': '立即登录'
   },
   menu: {
     'home': '首页',

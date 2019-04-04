@@ -2,9 +2,19 @@
 * @Author: name
 * @Date:   2019-04-01 09:39:39
 * @Last Modified by:   name
-* @Last Modified time: 2019-04-03 15:08:03
+* @Last Modified time: 2019-04-04 09:59:09
 */
 
+
+.header{
+  width:100%;
+  height: 60px;
+  line-height: 60px;
+  background: #081027;
+  position:fixed;
+  top: 0;
+  z-index:2;
+}
 /*登录注册*/
 .wrapper-login{
     display: flex;

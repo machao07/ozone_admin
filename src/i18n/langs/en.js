@@ -4,13 +4,23 @@ const en = {
     'btn': 'Login',
     'username': 'Username',
     'password': 'Password',
-    'signin': 'Sign in'
+    'title': 'System Login',
+    'nameholder': 'Please enter your account number',
+    'passholder': 'Please input a password',
+    'subtitle1': 'No account yet? ',
+    'subtitle2': 'Immediate registration'
   },
   register: {
     'btn': 'Register',
     'name': 'Name',
     'password': 'Password',
-    'ConfirmPassword': 'Confirm Password'
+    'title': 'System registration',
+    'accountholder': 'Please enter your account number',
+    'nameholder': 'Please enter your name',
+    'passholder': 'Please input a password',
+    'passconfirm': 'Please confirm your password',
+    'subtitle1': 'Do you have an account? ',
+    'subtitle2': 'Login immediately'
   },
   menu: {
     'home': 'Home',
