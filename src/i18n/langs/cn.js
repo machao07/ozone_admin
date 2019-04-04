@@ -41,7 +41,27 @@ const cn = {
     'subTitle': '添加智能合约地址，上传智能合约代码文件。',
     from: {
         'upLoad': '上传文件',
-        'addContract': '添加合约'
+        'addContract': '添加合约',
+        'searchholder': '搜索',
+        'searchBtn': '查询',
+        'allDel': '批量删除'
+    },
+    List: {
+      'num':'编号',
+      'contractName': '合约/文件名称',
+      'addTime': '添加时间',
+      'statues': '检测状态',
+      'operations': '操作',
+      operationsBtn: {
+        'see': "查看",
+        'del': "删除",
+        'download': '下载报告'
+      },
+      statuesbtn: {
+        '0': '未检测',
+        '1': '检测成功',
+        '2': '检测失败'
+      }
     }
   },
   ...enLocale

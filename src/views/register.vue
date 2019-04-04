@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="register">
     <el-row :gutter="20" class="header">
         <el-col :span="6" :offset="6" class="logo"><img src="../assets/images/ozone_logo.png" width="110" alt=""></el-col>
         <el-col :span="6">
@@ -49,7 +49,7 @@
 <script>
 import Language from '@/components/Language'
 export default {
-  name: "Register",
+  name: "register",
   components:{
     'Language': Language
   },
@@ -64,14 +64,7 @@ export default {
         callback()
       }
     }
-    //  <!--验证码是否为空-->
-    let checkSmscode = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入手机验证码'))
-      } else {
-        callback()
-      }
-    }
+
     // <!--验证密码-->
     let validatePass = (rule, value, callback) => {
       if (value === "") {
@@ -98,13 +91,11 @@ export default {
         pass: "",
         checkPass: "",
         tel: "",
-        smscode: ""
       },
       rules2: {
         pass: [{ validator: validatePass, trigger: 'change' }],
         checkPass: [{ validator: validatePass2, trigger: 'change' }],
         tel: [{ validator: checkTel, trigger: 'change' }],
-        smscode: [{ validator: checkSmscode, trigger: 'change' }],
       },
       buttonText: '发送验证码',
       isDisabled: false, // 是否禁止点击发送验证码按钮
@@ -112,29 +103,6 @@ export default {
     }
   },
   methods: {
-    // <!--发送验证码-->
-    sendCode () {
-      let tel = this.ruleForm2.tel
-      if (this.checkMobile(tel)) {
-        console.log(tel)
-        let time = 60
-        this.buttonText = '已发送'
-        this.isDisabled = true
-        if (this.flag) {
-          this.flag = false;
-          let timer = setInterval(() => {
-            time--;
-            this.buttonText = time + ' 秒'
-            if (time === 0) {
-              clearInterval(timer);
-              this.buttonText = '重新获取'
-              this.isDisabled = false
-              this.flag = true;
-            }
-          }, 1000)
-        }
-      }
-    },
     // <!--提交注册-->
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
@@ -153,15 +121,6 @@ export default {
       this.$router.push({
         path: "/login"
       });
-    },
-    // 验证手机号
-    checkMobile(str) {
-      let re = /^1\d{10}$/
-      if (re.test(str)) {
-        return true;
-      } else {
-        return false;
-      }
     }
   }
 };

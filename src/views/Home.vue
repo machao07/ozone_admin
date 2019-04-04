@@ -1,8 +1,9 @@
 <template>
     <!-- <div id="app"> -->
-    <el-container>
+    <el-container id="home">
         <Header></Header>
         <el-main>
+            <HomeContent v-show="$route.meta.showHomecontent"></HomeContent>
             <router-view></router-view>
         </el-main>
         <div class="bg"></div>
@@ -14,11 +15,14 @@
 <script>
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import HomeContent from '@/components/HomeContent'
 
 export default {
+  name: 'login',
   components:{
     'Header': Header,
-    'Footer': Footer
+    'Footer': Footer,
+    'HomeContent': HomeContent
   },
   data () {
     return {

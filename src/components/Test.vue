@@ -1,9 +1,9 @@
 <template>
   <section class="container">
     <div class="title">
-      <p class="mTitle animated fadeInUpBig">智能合约检测</p>
+      <p class="mTitle animated fadeInUpBig">{{$t('testing.title')}}</p>
       <div class="line animated fadeInUpBig" style="animation-delay: 0.1s;"></div>
-      <p class="sTitle animated fadeInUpBig" style="animation-delay: 0.2s; animation-duration: 1.2s;">添加智能合约地址，上传智能合约代码文件。</p>
+      <p class="sTitle animated fadeInUpBig" style="animation-delay: 0.2s; animation-duration: 1.2s;">{{$t('testing.subTitle')}}</p>
     </div>
 
     <!--工具条-->
@@ -15,16 +15,16 @@
             </el-form-item>
 
             <el-form-item>
-              <el-button type="" @click="" icon="el-icon-circle-plus">添加合约</el-button>
+              <el-button type="" @click="" icon="el-icon-circle-plus">{{$t('testing.from.addContract')}}</el-button>
             </el-form-item>
           </el-col>
 
           <el-col :span="12" class="animated bounceInRight" style="text-align:right">
             <el-form-item>
-              <el-input placeholder="搜素" style="width:300px;"></el-input>
+              <el-input :placeholder="$t('testing.from.searchholder')" style="width:300px;"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="" v-on:click="" icon="el-icon-search">查询</el-button>
+              <el-button type="" v-on:click="" icon="el-icon-search">{{$t('testing.from.searchBtn')}}</el-button>
             </el-form-item>
           </el-col>
 
@@ -34,30 +34,30 @@
       <!--列表-->
       <div class="tableLine">
         <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" align="left" @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="45"></el-table-column>
-            <el-table-column label="编号" width="55">
+            <el-table-column type="selection" width="40"></el-table-column>
+            <el-table-column :label="$t('testing.List.num')" width="80">
               <template slot-scope="scope">{{ scope.row.num }}</template>
             </el-table-column>
-            <el-table-column prop="name" label="合约/文件名称" show-overflow-tooltip width="400">
+            <el-table-column prop="name" :label="$t('testing.List.contractName')" show-overflow-tooltip width="380">
               <template slot-scope="scope">{{ scope.row.name }}</template>
             </el-table-column>
-            <el-table-column prop="time" label="添加时间" width="200">
+            <el-table-column prop="time" :label="$t('testing.List.addTime')" width="170">
               <template slot-scope="scope">{{ scope.row.time }}</template>
             </el-table-column>
-            <el-table-column prop="statue" label="检测状态" width="150">
+            <el-table-column prop="statue" :label="$t('testing.List.statues')" width="140">
               <template slot-scope="scope">{{ scope.row.statue }}</template>
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column :label="$t('testing.List.operations')">
               <template slot-scope="scope">
                 <el-button
                   size="mini" icon="el-icon-view"
-                  @click="handleSee(scope.$index, scope.row)">查看</el-button>
+                  @click="handleSee(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.see')}}</el-button>
                 <el-button
                   size="mini" icon="el-icon-delete"
-                  @click="handleDel(scope.$index, scope.row)">删除</el-button>
+                  @click="handleDel(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.del')}}</el-button>
                 <el-button
                   size="mini" icon="el-icon-download"
-                  @click="handleEdit(scope.$index, scope.row)">下载报告</el-button>
+                  @click="handleEdit(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.download')}}</el-button>
               </template>
             </el-table-column>
         </el-table>
@@ -65,7 +65,7 @@
       <!--工具条-->
       <el-row :span="24" style="padding: 20px 0;">
         <el-col :span="12" class="toolbar" style="text-align:left;">
-          <el-button type="danger" @click="" :disabled="this.sels.length===0" style="text-align:left">批量删除</el-button>
+          <el-button type="danger" @click="" :disabled="this.sels.length===0" style="text-align:left">{{$t('testing.from.allDel')}}</el-button>
         </el-col>
         <el-col :span="12" style="text-align:left;">
           <el-pagination :span="12"  background layout="prev, pager, next" @current-change="" :page-size="7" :total="50" style="float:right;" >
@@ -231,4 +231,5 @@
   .el-table--enable-row-hover .el-table__body tr:hover>td {
       background: none;
   }
+  .el-table_1_column_2 {text-align:center!important;}
 </style>

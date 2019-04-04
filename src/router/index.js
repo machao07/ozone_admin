@@ -26,10 +26,11 @@ export default new Router({
           path: '/',
           name: 'Home',
           component: Home,
-          meta: {title: '智能合约检测平台首页'},
-          children: [
-              { path: '/HomeContent', component: HomeContent, name: 'HomeContent'}
-          ]
+          // 显示首页内容
+          meta: {
+            index: 0,
+            showHomecontent: true
+          }
         },
         {
           path: '/Login',
@@ -47,6 +48,11 @@ export default new Router({
           path: '/',
           name: 'Home',
           component: Home,
+          // 不显示首页内容
+          meta: {
+            index: 1,
+            showHomecontent: false
+          },
           children: [
               { path: '/Test', component: Test, name: 'Test'}
           ]

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="login">
     <el-row :gutter="20" class="header">
         <el-col :span="6" :offset="6" class="logo"><img src="../assets/images/ozone_logo.png" width="110" alt=""></el-col>
         <el-col :span="6">

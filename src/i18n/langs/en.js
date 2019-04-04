@@ -41,7 +41,27 @@ const en = {
     'subTitle': 'Add smart contract address and upload smart contract code file.',
     from: {
         'upLoad': 'Upload files',
-        'addContract': 'Add contract'
+        'addContract': 'Add contract',
+        'searchholder': 'Search',
+        'searchBtn': 'Search',
+        'allDel': 'Batch deletion'
+    },
+    List: {
+      'num':'Number',
+      'contractName': 'Contract / File Name',
+      'addTime': 'Adding Time',
+      'statues': 'Detection State',
+      'operations': 'Operation',
+      operationsBtn: {
+        'see': "Inquiry",
+        'del': "Delete",
+        'download': 'Download Report'
+      },
+      statuesbtn: {
+        '0': 'Undetected',
+        '1': 'Successful Detection',
+        '2': 'Failure Detection'
+      }
     }
   },
   ...enLocale
