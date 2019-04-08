@@ -1,5 +1,5 @@
 <template>
-  <section class="container">
+  <section class="container" style="margin: 0 auto 40px auto;">
     <div class="title">
       <p class="mTitle animated fadeInUpBig">{{$t('testing.title')}}</p>
       <div class="line animated fadeInUpBig" style="animation-delay: 0.1s;"></div>

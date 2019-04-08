@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header></Header>
-    <section class="container">
+    <section class="container" style="margin: 80px auto 40px auto;">
       <div class="title">
         <p class="mTitle animated fadeInUpBig" style="animation-duration: 1s;">{{$t('testresult.title')}}</p>
         <div class="line animated fadeInUpBig" style="animation-delay: 0.3s;"></div>
