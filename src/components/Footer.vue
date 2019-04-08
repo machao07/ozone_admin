@@ -12,6 +12,6 @@
         border-top: 1px solid #888;
         color:#888;
         font-size: 14px;
-        z-index:2;
+        z-index:4;
     }
 </style>
