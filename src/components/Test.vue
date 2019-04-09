@@ -11,11 +11,11 @@
         <el-row :span="24">
           <el-col :span="12" class="animated bounceInLeft" style="text-align:left">
             <el-form-item>
-                <el-button type="" icon="el-icon-upload">{{$t('testing.from.upLoad')}}</el-button>
+                <el-button type="" @click="uploadDialog = true" icon="el-icon-upload">{{$t('testing.from.upLoad')}}</el-button>
             </el-form-item>
 
             <el-form-item>
-              <el-button type="" @click="" icon="el-icon-circle-plus">{{$t('testing.from.addContract')}}</el-button>
+              <el-button type="" @click="addressDialog = true" icon="el-icon-circle-plus">{{$t('testing.from.addContract')}}</el-button>
             </el-form-item>
           </el-col>
 
@@ -30,6 +30,47 @@
 
         </el-row>
       </el-form>
+
+      <!-- 上传文件dialog -->
+      <el-dialog title="请上传智能合约代码文件" :visible.sync="uploadDialog" width="24%" :append-to-body='true' style="text-align:center;">
+        <div class="uploadDialog-content">
+          <el-upload ref="upload" 
+            :limit="1"
+            :auto-upload="false"  
+            drag
+            :file-list="fileList"
+            :http-request="uploadFile" 
+            :on-exceed="handleExceed"
+            accept=''
+            action="string">
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+          </el-upload>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="uploadDialog = false">取 消</el-button>
+          <el-button type="primary" @click="submitUpload">确定</el-button>
+        </span>
+      </el-dialog>
+
+      <!-- 添加合约地址dialog -->
+      <el-dialog title="添加合约地址" :visible.sync="addressDialog" width="24%" :append-to-body='true' style="text-align:center;">
+        <el-input type="textarea" placeholder="请输入合约地址" v-model="form.desc"></el-input>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="addressDialog = false">取 消</el-button>
+          <el-button type="primary" @click="submitAddAddress">确 定</el-button>
+        </div>
+      </el-dialog>
+
+      <!-- 删除dialog -->
+      <el-dialog title="提示" :visible.sync="delDialog" width="24%" :append-to-body='true' style="text-align:center;">
+        <p>确认删除该智能合约的检测信息？</p>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="delDialog = false">取 消</el-button>
+          <el-button type="primary" @click="submitDel">确 定</el-button>
+        </div>
+      </el-dialog>
 
       <!--列表-->
       <div class="tableLine">
@@ -59,7 +100,7 @@
                   @click="handleSee(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.see')}}</el-button>
                 <el-button
                   size="mini" icon="el-icon-delete"
-                  @click="handleDel(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.del')}}</el-button>
+                  @click="delDialog = true">{{$t('testing.List.operationsBtn.del')}}</el-button>
                 <el-button
                   size="mini" icon="el-icon-download"
                   @click="handleDownload(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.download')}}</el-button>
@@ -82,9 +123,17 @@
 </template>
 
 <script>
+  var pageSize = 10;
+  var nowPage = 0;
+  var delid = -1;
+
+  import $ from 'jquery'
   export default {
     data() {
       return {
+        form: {
+          desc: ''
+        },
         filters: {
           name: ''
         },
@@ -100,15 +149,7 @@
             { required: true, message: '请输入姓名', trigger: 'blur' }
           ]
         },
-        //新增界面数据
-        addForm: {
-          name: '',
-          sex: -1,
-          age: 0,
-          birth: '',
-          addr: ''
-        },
-        fileList: [{}],
+        fileList: [],
         tableData: [{
           num: '22',
           name: 'test_erc20_open_new_20190326.sol',
@@ -146,13 +187,16 @@
           statue: '检测成功'
         }],
         multipleSelection: [],
-        listLoading: false
+        listLoading: false,
+        uploadDialog: false,
+        addressDialog: false,
+        delDialog: false
       }
     },
     mounted() {
       this.loadList();
       // pageinit();
-      // getContracts();
+      this.getContracts();
     },
     methods: {
       //取消全选
@@ -193,42 +237,61 @@
 
         });
       },
-      //删除
-      handleDel(index, row) {
-        this.$confirm('确认删除该记录吗?', '提示', {
-          type: 'warning'
-        }).then(() => {
-          this.listLoading = true;
-          //NProgress.start();
-          let para = { id: row.id };
-          removeUser(para).then((res) => {
-            this.listLoading = false;
-            //NProgress.done();
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            });
-            this.getUsers();
-          });
-        }).catch(() => {
-
+      //查看
+      handleSee(id) {
+        let routeUrl = this.$router.resolve({
+             path: "/TestResult",
+             // query: {id:96}
         });
+        window.open(routeUrl .href, '_blank');
+        // this.$router.push('/TestResult');
+        // this.editFormVisible = true;
+        // this.editForm = Object.assign({}, row);
       },
-      handleDownload(){
-
+      //删除
+      submitDel(){
+        if(delid>0){
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: apiuri +"/admin/file/delfile",
+                xhrFields: {withCredentials: true},
+                crossDomain: true,
+                data:{
+                    id: delid
+                },
+                success: function (result) {
+                    if (result.code == 0) {
+                        this.$message.success("删除成功");
+                    } else {
+                        this.$message.error("删除失败");
+                        goErrorPage(result.code);
+                    }
+                    getContracts(app.contracts.nowPages);
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+      },
+      handleDownload(id){
+          location.href = apiuri+"/file/downword/"+id;
       },
       //列表加载
       loadList(){
-        // this.$ajax({
-        //   method: 'get',
-        //   dataType: 'json',
-        //   url: 'https://ozone.mozi.one/api/admin/system/file/getall?page=1&pageSize=10'
-        // }).then(res => {
-        //     console.log(res.data)
-        // })
+        // console.log("列表加载");
+        this.axios({
+          method: 'get',
+          dataType: 'json',
+          url: 'https://ozone.mozi.one/api/admin/system/file/getall?page=1&pageSize=10'
+        }).then(res => {
+            console.log(res.data)
+        })
       },
       //分页
       getContracts(page){
+        // console.log("分页");
         $.ajax({
             type: "GET",
             dataType: "json",
@@ -240,7 +303,7 @@
                 pageSize: pageSize
             },
             success: function (result) {
-                var contract = result.data.content;
+                // var contract = result.data.content;
                 if(result.code==0){
                     app.contracts.data = result.data;
                     app.contracts.nowPages = page;
@@ -254,32 +317,102 @@
             }
         });
       },
-      //查看
-      handleSee(id) {
-        let routeUrl = this.$router.resolve({
-             path: "/TestResult",
-             // query: {id:96}
-        });
-        window.open(routeUrl .href, '_blank');
-        // this.$router.push('/TestResult');
-        // this.editFormVisible = true;
-        // this.editForm = Object.assign({}, row);
+      //上传文件
+      submitUpload() {
+        let list = $('.el-upload-list__item.is-ready');
+        console.log(list);
+        
+        if(list.length == 0){
+          this.$message({
+            type:'warning',
+            message:"请选择智能合约代码文件"
+          })
+          return;
+        }
+        this.$refs.upload.submit();
       },
-      delUserFile(id){
-        if(id>-1){
-            delid = id;
-            $('#delmodel').modal('show')
+      uploadFile(param){
+        var fileObj = param.file;
+        // FormData 对象
+        var form = new FormData();
+        // 文件对象
+        form.append("file", fileObj);
+        form.append("userId", this.userId);
+        form.append("userName", this.userName);
+        this.axios.get('url',form).then(res => {
+          if(res.data.success == true){
+            this.$message({
+              type:'success',
+              message:res.data.msg
+            })
+            this.fileList =[]
+          } else {
+            this.$message({
+              type:'success',
+              message:res.data.msg
+            })
+              this.fileList =[]
+          }
+        })
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+      // 添加合约
+      submitAddAddress(){
+        var address = $(".el-textarea__inner").val();
+
+        if (address != null && address != "" && address.length > 0) {
+            var addressarray = address.split("\n")
+            var alladdress = "";
+            for(var i=0;i<addressarray.length;i++){
+                alladdress += addressarray[i];
+                if(alladdress.length>0){
+                    alladdress +="&";
+                }
+            }
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: apiuri + "/admin/system/etherescan/addcontracts",
+                xhrFields: {withCredentials: true},
+                crossDomain: true,
+                data: {
+                    address: alladdress
+                },
+                success: function (result) {
+                    console.log(result)
+                    if (result.code == 0) {
+                        this.$message({
+                          type:'success',
+                          message: '添加成功'
+                        })
+                    } else {
+                        this.$message({
+                          type:'error',
+                          message: '添加失败，请检查合约地址是否正确'
+                        })
+                        $(".el-textarea__inner").val("")
+
+                    }
+                    getContracts(app.contracts.nowPages);
+                },
+                error: function (result) {
+                    $(".el-textarea__inner").val("")
+                }
+            });
+        } else {
+            this.$message.error("请输入合约地址");
         }
       }
     }
-}
+  }
 </script>
 
 <style>
   .title .sTitle{
     font-size:14px;
   }
-
   .el-form{margin-top: 5rem;}
   .tableLine{border: 1px solid #fff;border-radius:5px;padding: 10px 15px;margin:0 auto;max-width:1170px;width:100%;}
   .el-table{background-color: transparent;color: #b5bbc1;}
@@ -292,4 +425,5 @@
       background: none;
   }
   .el-table_1_column_2 {text-align:center!important;}
+  .el-dialog__footer{text-align: center;}
 </style>

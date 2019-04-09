@@ -12,6 +12,8 @@ import VueRouter from 'vue-router'
 import '../static/css/common.css'
 import VueModal from 'vue-js-modal'
 import i18n from './i18n/i18n'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
 
 Vue.use(ElementUI)
@@ -20,6 +22,7 @@ Vue.use(canvas)
 Vue.use(animate)
 Vue.use(VueModal)
 Vue.use(VueRouter)
+Vue.use(VueAxios, axios)
 
 
 Vue.config.productionTip = false
@@ -38,9 +41,9 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  i18n,
-  components: { App },
-  template: '<App/>'
+    el: '#app',
+    router,
+    i18n,
+    components: { App },
+    template: '<App/>'
 })

@@ -1,0 +1,28 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'D:\\work\\node\\node.exe',
+1 verbose cli   'D:\\work\\node\\node_global\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'jquery',
+1 verbose cli   '--save' ]
+2 info using npm@6.9.0
+3 info using node@v10.15.3
+4 verbose npm-session 524c415b62c5f9b9
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 http fetch GET 200 https://registry.npmjs.org/jquery 21349ms attempt #2
+8 silly fetchPackageMetaData error for jquery@latest sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg== integrity checksum failed when using sha512: wanted sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg== but got sha512-SN8yytAyNHw6CXyDe2biXWxGRdtyyvFOUcBsunJsBg8qnthTGR2jc6Zyh3uEX+kZFt8G+IucfKRf13y/hh5HKw==. (81828 bytes)
+9 timing stage:rollbackFailedOptional Completed in 0ms
+10 timing stage:runTopLevelLifecycles Completed in 43548ms
+11 verbose stack Error: sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg== integrity checksum failed when using sha512: wanted sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg== but got sha512-SN8yytAyNHw6CXyDe2biXWxGRdtyyvFOUcBsunJsBg8qnthTGR2jc6Zyh3uEX+kZFt8G+IucfKRf13y/hh5HKw==. (81828 bytes)
+11 verbose stack     at Transform.on (D:\work\node\node_global\node_modules\npm\node_modules\ssri\index.js:328:19)
+11 verbose stack     at Transform.emit (events.js:194:15)
+11 verbose stack     at endReadableNT (_stream_readable.js:1125:12)
+11 verbose stack     at process._tickCallback (internal/process/next_tick.js:63:19)
+12 verbose cwd D:\work\project\ozone_admin
+13 verbose Windows_NT 10.0.17134
+14 verbose argv "D:\\work\\node\\node.exe" "D:\\work\\node\\node_global\\node_modules\\npm\\bin\\npm-cli.js" "install" "jquery" "--save"
+15 verbose node v10.15.3
+16 verbose npm  v6.9.0
+17 error code EINTEGRITY
+18 error sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg== integrity checksum failed when using sha512: wanted sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg== but got sha512-SN8yytAyNHw6CXyDe2biXWxGRdtyyvFOUcBsunJsBg8qnthTGR2jc6Zyh3uEX+kZFt8G+IucfKRf13y/hh5HKw==. (81828 bytes)
+19 verbose exit [ 1, true ]

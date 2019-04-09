@@ -12,6 +12,7 @@
             </el-menu>
           </el-col>
 
+          <!-- 未登录 -->
           <el-col :span="4">
               <el-button size="small">
                 <router-link :to="{name: 'Login'}">{{$t('login.btn')}}</router-link>
@@ -19,6 +20,18 @@
               <el-button size="small">
                 <router-link :to="{name: 'Register'}">{{$t('register.btn')}}</router-link>
                 </el-button>
+          </el-col>
+
+          <!-- 登录后 -->
+          <el-col :span="4" class="userinfo" v-if="code == 1001">
+            <el-dropdown trigger="hover">
+              <span class="el-dropdown-link userinfo-inner"><img src="../assets/images/default.jpg" /> Name</span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>我的消息</el-dropdown-item>
+                <el-dropdown-item>设置</el-dropdown-item>
+                <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </el-col>
 
           <el-col :span="4" class="language">
@@ -37,7 +50,7 @@
       },
       data(){
         return{
-
+          code: ''
         }
       },
       mouted(){
@@ -47,7 +60,18 @@
 
       },
       methods:{
+        //退出登录
+        logout: function () {
+          var _this = this;
+          this.$confirm('确认退出吗?', '提示', {
+            //type: 'warning'
+          }).then(() => {
+            sessionStorage.removeItem('user');
+            _this.$router.push('/login');
+          }).catch(() => {
 
+          });
+        },
       }
     }
 </script>
