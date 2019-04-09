@@ -15,7 +15,6 @@ import i18n from './i18n/i18n'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-
 Vue.use(ElementUI)
 Vue.use(ElementUI, { locale })
 Vue.use(canvas)
@@ -23,6 +22,7 @@ Vue.use(animate)
 Vue.use(VueModal)
 Vue.use(VueRouter)
 Vue.use(VueAxios, axios)
+
 
 
 Vue.config.productionTip = false

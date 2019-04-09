@@ -23,7 +23,7 @@
           </el-col>
 
           <!-- 登录后 -->
-          <el-col :span="4" class="userinfo" v-if="code == 1001">
+          <el-col :span="4" class="userinfo" v-if="code == 0">
             <el-dropdown trigger="hover">
               <span class="el-dropdown-link userinfo-inner"><img src="../assets/images/default.jpg" /> Name</span>
               <el-dropdown-menu slot="dropdown">

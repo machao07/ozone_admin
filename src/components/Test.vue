@@ -32,7 +32,7 @@
       </el-form>
 
       <!-- 上传文件dialog -->
-      <el-dialog title="请上传智能合约代码文件" :visible.sync="uploadDialog" width="24%" :append-to-body='true' style="text-align:center;">
+      <el-dialog title="请上传智能合约代码文件" :visible.sync="uploadDialog" width="30%" :append-to-body='true' style="text-align:center;">
         <div class="uploadDialog-content">
           <el-upload ref="upload" 
             :limit="1"
@@ -55,7 +55,7 @@
       </el-dialog>
 
       <!-- 添加合约地址dialog -->
-      <el-dialog title="添加合约地址" :visible.sync="addressDialog" width="24%" :append-to-body='true' style="text-align:center;">
+      <el-dialog title="添加合约地址" :visible.sync="addressDialog" width="26%" :append-to-body='true' style="text-align:center;">
         <el-input type="textarea" placeholder="请输入合约地址" v-model="form.desc"></el-input>
         <div slot="footer" class="dialog-footer">
           <el-button @click="addressDialog = false">取 消</el-button>
@@ -64,7 +64,7 @@
       </el-dialog>
 
       <!-- 删除dialog -->
-      <el-dialog title="提示" :visible.sync="delDialog" width="24%" :append-to-body='true' style="text-align:center;">
+      <el-dialog title="提示" :visible.sync="delDialog" width="26%" :append-to-body='true' style="text-align:center;">
         <p>确认删除该智能合约的检测信息？</p>
         <div slot="footer" class="dialog-footer">
           <el-button @click="delDialog = false">取 消</el-button>
@@ -125,12 +125,20 @@
 <script>
   var pageSize = 10;
   var nowPage = 0;
-  var delid = -1;
+  var delid = 0;
 
   import $ from 'jquery'
   export default {
     data() {
       return {
+        contracts: {
+            nowPages: nowPage,
+            data: {content:[]}
+        },
+        user: {
+            username: "",
+            userhead: ""
+        },
         form: {
           desc: ''
         },
@@ -305,7 +313,7 @@
             success: function (result) {
                 // var contract = result.data.content;
                 if(result.code==0){
-                    app.contracts.data = result.data;
+                    // app.contracts.data = result.data;
                     app.contracts.nowPages = page;
                 }else{
                     // alert(result.message)

@@ -1,5 +1,5 @@
 function hasLogin() {
-    axios.get(apiuri + "/admin/usermsg")
+    this.axios.get(apiuri + "/admin/usermsg")
         .then(function(data) {
             if (data.daapita.code == 0) { //首页
                 location.href = "/";
@@ -9,21 +9,30 @@ function hasLogin() {
 
 //登出
 function logout() {
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        url: apiuri + "/user/logout",
-        xhrFields: { withCredentials: true },
-        crossDomain: true,
-        success: function(result) {
+    this.axios.get(apiuri + "/user/logout")
+        .then(result => {
             location.href = "/";
             return;
-        },
-        error: function(result) {
+        }).catch(error => {
             location.href = "/login";
             return;
-        }
-    });
+        })
+
+    // $.ajax({
+    //     type: "GET",
+    //     dataType: "json",
+    //     url: apiuri + "/user/logout",
+    //     xhrFields: { withCredentials: true },
+    //     crossDomain: true,
+    //     success: function(result) {
+    //         location.href = "/";
+    //         return;
+    //     },
+    //     error: function(result) {
+    //         location.href = "/login";
+    //         return;
+    //     }
+    // });
 }
 
 function goErrorPage(code) {

@@ -151,13 +151,15 @@
   import "codemirror/addon/hint/show-hint.css";
   import Header from '@/components/Header'
   import Footer from '@/components/Footer'
-
+  import $ from 'jquery'
+  
   let CodeMirror = require("codemirror/lib/codemirror");
   require("codemirror/mode/javascript/javascript");
   require("codemirror/addon/edit/matchbrackets");
   require("codemirror/addon/selection/active-line");
+  require("codemirror/addon/hint/javascript-hint");
+  // require("codemirror/addon/hint/show-hint");
   // require("codemirror/mode/sql/sql");
-  require("codemirror/addon/hint/show-hint");
   // require("codemirror/addon/hint/sql-hint");
 
   export default {
@@ -171,34 +173,53 @@
       }
     },
     mounted() {
-      let theme = 'ambiance'
-      let editor = CodeMirror.fromTextArea(this.$refs.mycode, {
-        mode: 'javascript',
-        indentWithTabs: true,
-        smartIndent: true,
-        lineNumbers: true,
-        scrollbarStyle: 'null',
-        matchBrackets: true,
-        theme: theme,
-        // autofocus: true,
-        extraKeys: {'Ctrl': 'autocomplete'},//自定义快捷键
-        hintOptions: {//自定义提示选项
-          tables: {
-            users: ['name', 'score', 'birthDate'],
-            countries: ['name', 'population', 'size']
-          }
-        }
-      });
-      editor.setSize('100%','550px');
-      //代码自动提示功能
-      editor.on('cursorActivity', function () {
-        editor.showHint()
-      })
-
-
+      this.checkoutList();
+      this.codeMirror();
     },
     methods: {
-
+      //检测结果选项卡
+      checkoutList(){
+        layui.use('element', function(){
+          var element = layui.element;
+          $.ajax({
+            type: "get",
+            url: "url",
+            dataType: "json",
+            success: function (res) {
+              var resData = res.data;
+              $.each(resData, function (index, item) { 
+                 
+              });
+            }
+          });
+        });
+      },
+      //代码在线编辑
+      codeMirror(){
+        let theme = 'ambiance';
+        let editor = CodeMirror.fromTextArea(this.$refs.mycode, {
+          mode: 'javascript',
+          indentWithTabs: true,
+          smartIndent: true,
+          lineNumbers: true,
+          scrollbarStyle: 'null',
+          matchBrackets: true,
+          theme: theme,
+          // autofocus: true,
+          extraKeys: {'Ctrl': 'autocomplete'},//自定义快捷键
+          hintOptions: {//自定义提示选项
+            tables: {
+              users: ['name', 'score', 'birthDate'],
+              countries: ['name', 'population', 'size']
+            }
+          }
+        });
+        editor.setSize('100%','550px');
+        //代码自动提示功能
+        editor.on('cursorActivity', function () {
+          editor.showHint()
+        })
+      }
     }
 }
 </script>
