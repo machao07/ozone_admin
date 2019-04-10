@@ -84,7 +84,7 @@
               success: function(result) {
                   // console.log(result);
                   sessionStorage.setItem("code", result.code);
-                  // console.log(sessionStorage.getItem("code"));
+                  console.log(sessionStorage.getItem("code"));
                   if (result.code == 0) {
                       // console.log(result.data.username);
                       $("#username").html(result.data.username);

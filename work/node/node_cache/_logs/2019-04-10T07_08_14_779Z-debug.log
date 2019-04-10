@@ -1,0 +1,37 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'D:\\work\\node\\node.exe',
+1 verbose cli   'D:\\work\\node\\node_global\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'qs',
+1 verbose cli   '-S' ]
+2 info using npm@6.9.0
+3 info using node@v10.15.3
+4 verbose npm-session f01e5cb3946ab505
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly fetchPackageMetaData error for qs@latest request to https://registry.npmjs.org/qs failed, reason: Client network socket disconnected before secure TLS connection was established
+8 timing stage:rollbackFailedOptional Completed in 2ms
+9 timing stage:runTopLevelLifecycles Completed in 110354ms
+10 verbose type system
+11 verbose stack FetchError: request to https://registry.npmjs.org/qs failed, reason: Client network socket disconnected before secure TLS connection was established
+11 verbose stack     at ClientRequest.req.on.err (D:\work\node\node_global\node_modules\npm\node_modules\node-fetch-npm\src\index.js:68:14)
+11 verbose stack     at ClientRequest.emit (events.js:189:13)
+11 verbose stack     at TLSSocket.socketErrorListener (_http_client.js:392:9)
+11 verbose stack     at TLSSocket.emit (events.js:189:13)
+11 verbose stack     at emitErrorNT (internal/streams/destroy.js:82:8)
+11 verbose stack     at emitErrorAndCloseNT (internal/streams/destroy.js:50:3)
+11 verbose stack     at process._tickCallback (internal/process/next_tick.js:63:19)
+12 verbose cwd D:\work\project\ozone_admin
+13 verbose Windows_NT 10.0.17134
+14 verbose argv "D:\\work\\node\\node.exe" "D:\\work\\node\\node_global\\node_modules\\npm\\bin\\npm-cli.js" "install" "qs" "-S"
+15 verbose node v10.15.3
+16 verbose npm  v6.9.0
+17 error code ECONNRESET
+18 error errno ECONNRESET
+19 error network request to https://registry.npmjs.org/qs failed, reason: Client network socket disconnected before secure TLS connection was established
+20 error network This is a problem related to network connectivity.
+20 error network In most cases you are behind a proxy or have bad network settings.
+20 error network
+20 error network If you are behind a proxy, please make sure that the
+20 error network 'proxy' config is set properly.  See: 'npm help config'
+21 verbose exit [ 1, true ]

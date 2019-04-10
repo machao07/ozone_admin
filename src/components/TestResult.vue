@@ -12,51 +12,51 @@
                 <li class="layui-this">
                   <div>
                     <p>1 security/enforce-explicit-visibility</p>
-                    <p class="text-warning">warning</p>
+                    <p class="text_warning">warning</p>
                   </div>
                   <div>
                     <p>No visibility specified explicitly for totalSupply function</p>
-                    <p class="text-warning">line:19</p>
+                    <p class="text_warning">line:19</p>
                   </div>
                 </li>
                 <li>
                   <div>
                     <p>2 security/enforce-explicit-visibility</p>
-                    <p class="text-warning">warning</p>
+                    <p class="text_warning">warning</p>
                   </div>
                   <div>
                     <p>No visibility specified explicitly for totalSupply function</p>
-                    <p class="text-warning">line:19</p>
+                    <p class="text_warning">line:19</p>
                   </div>
                 </li>
                 <li>
                   <div>
                     <p>3 security/enforce-explicit-visibility</p>
-                    <p class="text-warning">warning</p>
+                    <p class="text_warning">warning</p>
                   </div>
                   <div>
                     <p>No visibility specified explicitly for totalSupply function</p>
-                    <p class="text-warning">line:19</p>
+                    <p class="text_warning">line:19</p>
                   </div>
                 </li>
                 <li>
                   <div>
                     <p>4 security/enforce-explicit-visibility</p>
-                    <p class="text-warning">warning</p>
+                    <p class="text_warning">warning</p>
                   </div>
                   <div>
                     <p>No visibility specified explicitly for totalSupply function</p>
-                    <p class="text-warning">line:19</p>
+                    <p class="text_warning">line:19</p>
                   </div>
                 </li>
                 <li>
                   <div>
                     <p>5 security/enforce-explicit-visibility</p>
-                    <p class="text-warning">warning</p>
+                    <p class="text_warning">warning</p>
                   </div>
                   <div>
                     <p>No visibility specified explicitly for totalSupply function</p>
-                    <p class="text-warning">line:19</p>
+                    <p class="text_warning">line:19</p>
                   </div>
                 </li>
             </ul>
@@ -255,9 +255,6 @@
   display: none;
 }
 .layui-tab-title .layui-this:after{border: none;}
-.text-warning{color:#ffc107;}
-.text-success {color: #3bb001;}
-.text-danger {color: #dc3545;}
 
 /*滚动条样式*/
 .layui-tab-title::-webkit-scrollbar {/*滚动条整体样式*/

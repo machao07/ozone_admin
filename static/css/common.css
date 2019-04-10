@@ -17,6 +17,18 @@ body {
     background: #081027;
 }
 
+.text_success {
+    color: #3bb001;
+}
+
+.text_danger {
+    color: #dc3545;
+}
+
+.text_warning {
+    color: #ffc107;
+}
+
 
 /*滚动条样式*/
 

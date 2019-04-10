@@ -64,18 +64,19 @@
       </el-dialog>
 
       <!-- 删除dialog -->
-      <el-dialog title="提示" :visible.sync="delDialog" width="26%" :append-to-body='true' style="text-align:center;">
+      <!-- <el-dialog title="提示" :visible.sync="delDialog" width="26%" :append-to-body='true' style="text-align:center;">
         <p>确认删除该智能合约的检测信息？</p>
         <div slot="footer" class="dialog-footer">
           <el-button @click="delDialog = false">取 消</el-button>
           <el-button type="primary" @click="submitDel">确 定</el-button>
         </div>
-      </el-dialog>
+      </el-dialog> -->
 
       <!--列表-->
       <div class="tableLine">
         <el-table ref="multipleTable" v-loading="listLoading"
-        element-loading-text="拼命加载中"
+        empty-text=" "
+        element-loading-text="加载中"
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0.6)"
         :data="tableData" tooltip-effect="dark" align="left"
@@ -91,7 +92,13 @@
               <template slot-scope="scope">{{ scope.row.loaddate }}</template>
             </el-table-column>
             <el-table-column prop="statue" :label="$t('testing.List.statues')" width="140">
-              <template slot-scope="scope" :class="scope.row.analysisstatus==1?'align-middle text-success':scope.row.analysisstatus==2?'align-middle text-danger':'align-middle text-waring'" >{{ scope.row.analysisstatus==1?'检测成功':scope.row.analysisstatus==2?'检测失败':'待检测' }}</template>
+              <template slot-scope="scope">
+                <span class="text_success" v-if="scope.row.analysisstatus == 1">检测成功</span>
+                <span class="text_danger" v-else-if="scope.row.analysisstatus == 2">检测失败</span>
+                <span class="text_wraning" v-else>待检测</span>
+                <!-- {{ scope.row.analysisstatus==1?'检测成功':scope.row.analysisstatus==2?'检测失败':'待检测' }} -->
+                
+              </template>
             </el-table-column>
             <el-table-column :label="$t('testing.List.operations')">
               <template slot-scope="scope">
@@ -100,7 +107,7 @@
                   @click="handleSee(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.see')}}</el-button>
                 <el-button
                   size="mini" icon="el-icon-delete"
-                  @click="delDialog = true">{{$t('testing.List.operationsBtn.del')}}</el-button>
+                  @click="handleDelete(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.del')}}</el-button>
                 <el-button
                   size="mini" icon="el-icon-download"
                   @click="handleDownload(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.download')}}</el-button>
@@ -128,13 +135,10 @@
   var delid = 0;
 
   import $ from 'jquery'
+
   export default {
     data() {
       return {
-        contracts: {
-            nowPages: nowPage,
-            data: {content:[]}
-        },
         user: {
             username: "",
             userhead: ""
@@ -145,9 +149,13 @@
         filters: {
           name: ''
         },
-        total: 0,
-        page: 1,
+        // total: 0,
+        // page: 1,
+        delid: '',
         listLoading: false,
+        tableData: [],
+        nowPages: nowPage,
+        contents: [],
         sels: [],//列表选中列
         addFormVisible: false,//新增界面是否显示
         addLoading: false,
@@ -157,9 +165,7 @@
           ]
         },
         fileList: [],
-        tableData: [],
         multipleSelection: [],
-        listLoading: false,
         uploadDialog: false,
         addressDialog: false,
         delDialog: false
@@ -167,10 +173,47 @@
     },
     mounted() {
       this.loadList();
-      // pageinit();
-      this.getContracts();
+      this.getContracts(1);
+    },
+    created(){
+
     },
     methods: {
+      getContracts(page) {     
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: apiurl+"/admin/file/getallbyuser",
+            xhrFields: {withCredentials: true},
+            crossDomain: true,
+            data: {
+                page: page,
+                pageSize: pageSize
+            },
+            success:function(result){
+                this.contents = result.data;
+                this.nowPages = page;
+                // console.log(this.content)
+                // console.log(this.nowPages)
+            }
+          });
+      },
+      //列表加载
+      loadList(){
+        // console.log("列表加载");
+        this.axios.get(apiurl+"/admin/system/file/getall?page=1&pageSize=10", {
+              headers: {
+                "Content-Type":"application/json;charset=utf-8"
+              },
+              withCredentials : true
+            })
+            .then(res => {
+              // console.log(res.data);
+              console.log(res.data.data.content);
+                this.tableData = res.data.data.content;
+            })
+            .catch(error => {})
+      },
       //取消全选
       toggleSelection(rows) {
         if (rows) {
@@ -192,7 +235,8 @@
         var ids = this.sels.map(item => item.id).toString();
         this.$confirm('确认删除选中记录吗？', '提示', {
           type: 'warning'
-        }).then(() => {
+        })
+        .then(() => {
           this.listLoading = true;
           //NProgress.start();
           let para = { ids: ids };
@@ -205,94 +249,64 @@
             });
             this.getUsers();
           });
-        }).catch(() => {
+        })
+        .catch(() => {
 
         });
       },
-      //查看
-      handleSee(id) {
-        let routeUrl = this.$router.resolve({
-             path: "/TestResult",
-             // query: {id:96}
-        });
-        window.open(routeUrl .href, '_blank');
-        // this.$router.push('/TestResult');
-        // this.editFormVisible = true;
-        // this.editForm = Object.assign({}, row);
-      },
-      //删除
-      submitDel(){
-        if(delid>0){
-            $.ajax({
-                type: "POST",
-                dataType: "json",
-                url: apiuri +"/admin/file/delfile",
-                xhrFields: {withCredentials: true},
-                crossDomain: true,
-                data:{
-                    id: delid
-                },
-                success: function (result) {
-                    if (result.code == 0) {
-                        this.$message.success("删除成功");
-                    } else {
-                        this.$message.error("删除失败");
-                        goErrorPage(result.code);
-                    }
-                    // getContracts(app.contracts.nowPages);
-                },
-                error: function (result) {
-                    console.log(result);
-                }
-            });
-        }
-      },
-      handleDownload(id){
-          location.href = apiurl+"/file/downword/"+id;
-      },
-      //列表加载
-      loadList(){
-        // console.log("列表加载");
-        this.axios.get(apiurl+"/admin/system/file/getall?page=1&pageSize=10", {
+      // 删除
+      handleDelete(index){
+        this.$confirm(
+          "确认删除该智能合约的检测信息？",
+          {
+            confirmButtonText: "确定",
+            cancelbuttonText: "取消",
+            type: "warning"
+          }
+        )
+        .then(() => {
+          var id = this.tableData[index].id;
+          console.log(id);
+          this.axios
+            .post(apiurl +"/admin/file/delfile", this.$qs.stringify({ id: id }), {
               headers: {
                 "Content-Type":"application/json;charset=utf-8"
               },
-              withCredentials : true
+              withCredentials : true              
             })
             .then(res => {
-              // console.log(res.data);
-              console.log(res.data.data.content);
-                this.tableData = res.data.data.content;
+              console.log(res.data);
+              // if(res.data.code == 0 ){
+                this.tableData.splice(index, 1);
+                this.$message({
+                  type: "success",
+                  message: "删除成功"
+                })
+                getContracts(this.contracts.nowPages);
+              // }
             })
-            .catch(error => {})
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          })          
+        })
       },
-      //分页
-      getContracts(page){
-        // console.log("分页");
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: apiurl+"/admin/system/file/getall?page=1&pageSize=10",
-            xhrFields: {withCredentials: true},
-            crossDomain: true,
-            data: {
-                page: page,
-                pageSize: pageSize
-            },
-            success: function (result) {
-                // var contract = result.data.content;
-                if(result.code==0){
-                    // app.contracts.data = result.data;
-                    // contracts.nowPages = page;
-                }else{
-                    // alert(result.message)
-                    goErrorPage(result.code);
-                }
-            },
-            error: function (result) {
-                console.log(result)
-            }
-        });
+      //查看
+      handleSee(index) {
+        var id = this.tableData[index].id
+        location.href = "/TestResult?id="+id;
+        // let routeUrl = this.$router.resolve({
+        //      path: "/TestResult",
+        //     //  query: id
+        // });
+        // window.open(routeUrl .href, '_blank');
+      },
+      //下载报告
+      handleDownload(index){
+          var id = this.tableData[index].id
+          location.href = apiurl+"/file/downword/"+id;
       },
       //上传文件
       submitUpload() {

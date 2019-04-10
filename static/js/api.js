@@ -5,14 +5,14 @@ var apiurl = "https://ozone.mozi.one/api";
 //     }
 // });
 
-// function hasLogin() {
-//     this.axios.get(apiurl + "/admin/usermsg")
-//         .then(function(data) {
-//             if (data.daapita.code == 0) { //首页
-//                 location.href = "/";
-//             }
-//         }).catch(function(error) {});
-// }
+function hasLogin() {
+    this.axios.get(apiurl + "/admin/usermsg")
+        .then(function(data) {
+            if (data.code == 0) { //首页
+                location.href = "/";
+            }
+        }).catch(function(error) {});
+}
 
 //登出
 function logout() {
@@ -43,7 +43,6 @@ function logout() {
 }
 
 function goErrorPage(code) {
-    sessionStorage.removeItem('code');
     if (code == 1001) { //没有登录
         location.href = "/login";
     } else if (code == 1002) { //无权限
@@ -51,7 +50,9 @@ function goErrorPage(code) {
     } else if (code == -2) { //系统错误
         location.href = "/404";
     }
+    // console.log(code);
 }
+
 
 function getParameter(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");

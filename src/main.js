@@ -14,6 +14,7 @@ import VueModal from 'vue-js-modal'
 import i18n from './i18n/i18n'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import qs from 'qs';
 
 Vue.use(ElementUI)
 Vue.use(ElementUI, { locale })
@@ -22,6 +23,7 @@ Vue.use(animate)
 Vue.use(VueModal)
 Vue.use(VueRouter)
 Vue.use(VueAxios, axios)
+Vue.prototype.$qs = qs;
 
 
 
