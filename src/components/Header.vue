@@ -13,7 +13,7 @@
           </el-col>
 
           <!-- 未登录 -->
-          <el-col :span="4">
+          <el-col :span="4" v-show="code != 0">
               <el-button size="small">
                 <router-link :to="{name: 'Login'}">{{$t('login.btn')}}</router-link>
               </el-button>
@@ -23,9 +23,12 @@
           </el-col>
 
           <!-- 登录后 -->
-          <el-col :span="4" class="userinfo" v-if="code == 0">
+          <el-col :span="4" class="userinfo" v-show="code == 0">
             <el-dropdown trigger="hover">
-              <span class="el-dropdown-link userinfo-inner"><img src="../assets/images/default.jpg" /> Name</span>
+              <span class="el-dropdown-link userinfo-inner">
+                <img src="../assets/images/default.jpg" />
+                <span id="username"></span>
+              </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>我的消息</el-dropdown-item>
                 <el-dropdown-item>设置</el-dropdown-item>
@@ -46,32 +49,55 @@
     import Language from '@/components/Language'
     export default{
       components:{
-        'Language': Language
+        'Language': Language,
       },
       data(){
         return{
-          code: ''
+          code: sessionStorage.getItem('code')
         }
       },
       mouted(){
-
+        
       },
-      watch: {
-
+      created(){
+        this.getLoginUser();
       },
-      methods:{
+      methods: {
         //退出登录
-        logout: function () {
+        logout() {
           var _this = this;
           this.$confirm('确认退出吗?', '提示', {
             //type: 'warning'
           }).then(() => {
-            sessionStorage.removeItem('user');
-            _this.$router.push('/login');
-          }).catch(() => {
-
-          });
+            sessionStorage.removeItem('code');
+            location.href = "/";
+            // _this.$router.push('/');
+          }).catch(() => {});
         },
+        getLoginUser() {
+          $.ajax({
+              type: "GET",
+              dataType: "json",
+              url: apiurl + "/admin/usermsg",
+              xhrFields: { withCredentials: true },
+              crossDomain: true,
+              success: function(result) {
+                  // console.log(result);
+                  sessionStorage.setItem("code", result.code);
+                  // console.log(sessionStorage.getItem("code"));
+                  if (result.code == 0) {
+                      // console.log(result.data.username);
+                      $("#username").html(result.data.username);
+                  } else {
+                      location.href = "/login";
+                  }
+              },
+              error: function(result) {
+                  location.href = "/login";
+                  return;
+              }
+          });
+        }
       }
     }
 </script>

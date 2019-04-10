@@ -11,10 +11,10 @@
           <h2><font size="5">{{$t('login.title')}}</font></h2>
           <el-form :model="loginForm" :rules="fieldRules" ref="loginForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
               <el-form-item prop="account">
-                  <el-input type="text" v-model="loginForm.account" auto-complete="off" :placeholder="$t('login.nameholder')"></el-input>
+                  <el-input type="text" id="account" v-model="loginForm.account" auto-complete="off" :placeholder="$t('login.nameholder')"></el-input>
               </el-form-item>
               <el-form-item prop="password">
-                  <el-input type="password" v-model="loginForm.password" auto-complete="off" :placeholder="$t('login.passholder')"></el-input>
+                  <el-input type="password" id="password" v-model="loginForm.password" auto-complete="off" :placeholder="$t('login.passholder')"></el-input>
               </el-form-item>
               <!-- <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox> -->
               <el-form-item>
@@ -22,7 +22,7 @@
                 <el-button type="primary" style="width:100%;" @click.native.prevent="login" :loading="logining">{{$t('login.btn')}}</el-button>
               </el-form-item>
               <el-form-item>
-                <p class="login" @click="">{{$t('login.subtitle1')}}<router-link :to="{name: 'Register'}"><font color="#1E95FE">{{$t('login.subtitle2')}}</font></router-link></p>
+                <p class="login" @click="login">{{$t('login.subtitle1')}}<router-link :to="{name: 'Register'}"><font color="#1E95FE">{{$t('login.subtitle2')}}</font></router-link></p>
               </el-form-item>
           </el-form>
           <div class="footer-wrapper">
@@ -35,6 +35,7 @@
 
 <script>
   import Language from '@/components/Language'
+
   export default {
     name: 'Login',
     components:{
@@ -44,8 +45,8 @@
       return {
         logining: false,
         loginForm: {
-          account: '', //admin
-          password: '' //123456
+          account: '', 
+          password: '' 
         },
         fieldRules: {
           account: [
@@ -58,22 +59,51 @@
         checked: true
       };
     },
+    created(){
+      // this.haslogin();
+    },
     methods: {
       login() {
-        this.$router.push('/')  // 登录成功，跳转到主页
-
-        // let userInfo = {account:this.loginForm.account, password:this.loginForm.password}
-        // this.$api.login(JSON.stringify(userInfo)).then((res) => {
-        //     Cookies.set('token', res.data.token) // 放置token到Cookie
-        //     sessionStorage.setItem('user', userInfo.account) // 保存用户到本地会话
-        //     this.$router.push('/')  // 登录成功，跳转到主页
-        //   }).catch(function(res) {
-        //     alert(res);
-        //   });
+        var account = $("#account").val();
+        var pwd = $("#password").val();
+        if(!account.endsWith("@mozi.one")){
+            pwd = hex_md5(pwd);
+        }
+        this.loading = true;
+        // this.$router.push('/')  // 登录成功，跳转到主页
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiurl +"/user/login",
+            data:{
+                account: account,
+                password: pwd
+            },
+            success: function (result) {
+                this.loading = false;
+                console.log(result);
+                if(result.code==0){
+                    // this.$router.push('/')
+                    location.href = "/";
+                }else{
+                    alert(result.message);
+                }
+            }
+        });
       },
-      reset() {
-        this.$refs.loginForm.resetFields();
-      }
+      // haslogin(){
+      //     this.axios.get(apiurl + "/admin/usermsg",{
+      //         "account": this.account, 
+      //         "password": this.password
+      //         })
+      //         .then(res => {
+      //           console.log(res.data);
+      //           // console.log(res.data.code);
+      //           localStorage.setItem("code", res.data.code);
+      //           // console.log(localStorage.getItem("code", res.data.code));
+      //           console.log(res);
+      //         })
+      // }
     }
   }
 </script>

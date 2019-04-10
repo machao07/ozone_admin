@@ -9,13 +9,13 @@
     <div class="wrapper-login">
         <div class="from-wrapper">
             <h2><font size="5">{{$t('register.title')}}</font></h2>
-            <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" class="demo-ruleForm">
+            <el-form :model="form" status-icon :rules="registerRules" ref="form" class="demo-ruleForm">
                 <el-form-item prop="account">
-                    <el-input v-model="ruleForm2.account" auto-complete="off" :placeholder="$t('register.accountholder')"></el-input>
+                    <el-input id="account" v-model="form.account" auto-complete="off" :placeholder="$t('register.accountholder')"></el-input>
                 </el-form-item>
 
-                <el-form-item prop="name">
-                    <el-input v-model="ruleForm2.name" auto-complete="off" :placeholder="$t('register.nameholder')"></el-input>
+                <el-form-item prop="username">
+                    <el-input id="username" v-model="form.username" auto-complete="off" :placeholder="$t('register.nameholder')"></el-input>
                 </el-form-item>
                 <!-- <el-form-item prop="smscode" class="code">
                     <el-col :span="16">
@@ -25,14 +25,14 @@
                         <el-button type="primary" :disabled='isDisabled' @click="sendCode">{{buttonText}}</el-button>
                     </el-col>
                 </el-form-item> -->
-                <el-form-item prop="pass">
-                    <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" :placeholder="$t('register.passholder')"></el-input>
+                <el-form-item prop="password">
+                    <el-input id="password" type="password" v-model="form.password" auto-complete="off" :placeholder="$t('register.passholder')"></el-input>
                 </el-form-item>
-                <el-form-item prop="checkPass">
-                    <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" :placeholder="$t('register.passconfirm')"></el-input>
+                <el-form-item prop="repassword">
+                    <el-input id="repassword" type="repassword" v-model="form.repassword" auto-complete="off" :placeholder="$t('register.passconfirm')"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm2')" style="width:100%;">{{$t('register.btn')}}</el-button>
+                    <el-button type="primary" @click="register" style="width:100%;">{{$t('register.btn')}}</el-button>
                 </el-form-item>
                 <el-form-item>
                     <p class="login" @click="gotoLogin">{{$t('register.subtitle1')}}<router-link :to="{name: 'Login'}"><font color="#1E95FE">{{$t('register.subtitle2')}}</font></router-link></p>
@@ -54,65 +54,65 @@ export default {
     'Language': Language
   },
   data() {
-    // <!--验证手机号是否合法-->
-    let checkTel = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入手机号码'))
-      } else if (!this.checkMobile(value)) {
-        callback(new Error('手机号码不合法'))
-      } else {
-        callback()
-      }
-    }
-
-    // <!--验证密码-->
-    let validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"))
-      } else {
-        if (this.ruleForm2.checkPass !== "") {
-          this.$refs.ruleForm2.validateField("checkPass");
-        }
-        callback()
-      }
-    }
-    // <!--二次验证密码-->
-    let validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm2.pass) {
-        callback(new Error("两次输入密码不一致!"));
-      } else {
-        callback();
-      }
-    };
     return {
-      ruleForm2: {
-        pass: "",
-        checkPass: "",
-        tel: "",
-      },
-      rules2: {
-        pass: [{ validator: validatePass, trigger: 'change' }],
-        checkPass: [{ validator: validatePass2, trigger: 'change' }],
-        tel: [{ validator: checkTel, trigger: 'change' }],
-      },
-      buttonText: '发送验证码',
-      isDisabled: false, // 是否禁止点击发送验证码按钮
-      flag: true
+        form:{
+            account: '', 
+            username:'',
+            password:''
+        },
+        registerRules: {
+          account: [
+            { required: true, message: '请输入账号', trigger: 'blur' },
+          ],
+          username: [
+            { required: true, message: '请输入姓名', trigger: 'blur' },
+          ],
+          password: [
+            { required: true, message: '请输入密码', trigger: 'blur' },
+          ],
+          repassword: [
+            { required: true, message: '请再次输入密码', trigger: 'blur' },
+          ]
+        },
+        checked: true
     }
   },
   methods: {
     // <!--提交注册-->
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          setTimeout(() => {
-            alert('注册成功')
-          }, 400);
-        } else {
-          console.log("error submit!!");
-          return false;
+    register() {
+      var account =  $.trim($("#account").val());
+      var username = $.trim($("#username").val());
+      var password = $.trim($("#password").val());
+      var repassword = $.trim($("#repassword").val());
+
+      if(account.endsWith("@mozi.one")){
+          alert("禁止使用以 @mozi.one 结尾的账号 ");
+          return;
+      }
+
+      var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+      if(reg.test(account)){
+          alert("账号禁止使用中文！");
+          return;
+      }
+
+      if(password!=repassword){
+          alert("两次密码输入不一致")
+          return;
+      }
+
+      axios.post(apiuri + "/user/register",{
+        account: account,
+        username: username,
+        password: password
+      })
+      .then(res => {
+        if(result.code==0){
+            $alert("恭喜您，注册成功，请进行登录！");
+            location.href="login";
+            return;
+        }else{
+            $alert(result.message)
         }
       })
     },

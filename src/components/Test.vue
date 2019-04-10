@@ -82,16 +82,16 @@
         @selection-change="selsChange">
             <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column :label="$t('testing.List.num')" width="80">
-              <template slot-scope="scope">{{ scope.row.num }}</template>
+              <template slot-scope="scope">{{ scope.row.id }}</template>
             </el-table-column>
             <el-table-column prop="name" :label="$t('testing.List.contractName')" show-overflow-tooltip width="380">
-              <template slot-scope="scope">{{ scope.row.name }}</template>
+              <template slot-scope="scope">{{ scope.row.filename }}</template>
             </el-table-column>
             <el-table-column prop="time" :label="$t('testing.List.addTime')" width="170">
-              <template slot-scope="scope">{{ scope.row.time }}</template>
+              <template slot-scope="scope">{{ scope.row.loaddate }}</template>
             </el-table-column>
             <el-table-column prop="statue" :label="$t('testing.List.statues')" width="140">
-              <template slot-scope="scope">{{ scope.row.statue }}</template>
+              <template slot-scope="scope" :class="scope.row.analysisstatus==1?'align-middle text-success':scope.row.analysisstatus==2?'align-middle text-danger':'align-middle text-waring'" >{{ scope.row.analysisstatus==1?'检测成功':scope.row.analysisstatus==2?'检测失败':'待检测' }}</template>
             </el-table-column>
             <el-table-column :label="$t('testing.List.operations')">
               <template slot-scope="scope">
@@ -145,7 +145,6 @@
         filters: {
           name: ''
         },
-        users: [],
         total: 0,
         page: 1,
         listLoading: false,
@@ -158,42 +157,7 @@
           ]
         },
         fileList: [],
-        tableData: [{
-          num: '22',
-          name: 'test_erc20_open_new_20190326.sol',
-          time: '2019-03-28 14:33:02',
-          statue: '检测成功'
-        }, {
-          num: '13',
-          name: '0xA5fccc3F1A4e56fDA5A86F0fe8B7558881B67523.sol',
-          time: '2019-03-28 14:33:02',
-          statue: '检测成功'
-        }, {
-          num: '12',
-          name: 'test_erc20_open_new_20190326.sol',
-          time: '2019-03-28 14:33:02',
-          statue: '检测成功'
-        }, {
-          num: '11',
-          name: '0xA5fccc3F1A4e56fDA5A86F0fe8B7558881B67523.sol',
-          time: '2019-03-28 14:33:02',
-          statue: '检测成功'
-        }, {
-          num: '8',
-          name: 'test_erc20_open_new_20190326.sol',
-          time: '2019-03-28 14:33:02',
-          statue: '检测成功'
-        }, {
-          num: '7',
-          name: '0xA5fccc3F1A4e56fDA5A86F0fe8B7558881B67523.sol',
-          time: '2019-03-28 14:33:02',
-          statue: '检测成功'
-        }, {
-          num: '6',
-          name: 'test_erc20_open_new_20190326.sol',
-          time: '2019-03-28 14:33:02',
-          statue: '检测成功'
-        }],
+        tableData: [],
         multipleSelection: [],
         listLoading: false,
         uploadDialog: false,
@@ -275,7 +239,7 @@
                         this.$message.error("删除失败");
                         goErrorPage(result.code);
                     }
-                    getContracts(app.contracts.nowPages);
+                    // getContracts(app.contracts.nowPages);
                 },
                 error: function (result) {
                     console.log(result);
@@ -284,18 +248,23 @@
         }
       },
       handleDownload(id){
-          location.href = apiuri+"/file/downword/"+id;
+          location.href = apiurl+"/file/downword/"+id;
       },
       //列表加载
       loadList(){
         // console.log("列表加载");
-        this.axios({
-          method: 'get',
-          dataType: 'json',
-          url: 'https://ozone.mozi.one/api/admin/system/file/getall?page=1&pageSize=10'
-        }).then(res => {
-            console.log(res.data)
-        })
+        this.axios.get(apiurl+"/admin/system/file/getall?page=1&pageSize=10", {
+              headers: {
+                "Content-Type":"application/json;charset=utf-8"
+              },
+              withCredentials : true
+            })
+            .then(res => {
+              // console.log(res.data);
+              console.log(res.data.data.content);
+                this.tableData = res.data.data.content;
+            })
+            .catch(error => {})
       },
       //分页
       getContracts(page){
@@ -303,7 +272,7 @@
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: "https://ozone.mozi.one/api/admin/system/file/getall?page=1&pageSize=10",
+            url: apiurl+"/admin/system/file/getall?page=1&pageSize=10",
             xhrFields: {withCredentials: true},
             crossDomain: true,
             data: {
@@ -314,7 +283,7 @@
                 // var contract = result.data.content;
                 if(result.code==0){
                     // app.contracts.data = result.data;
-                    app.contracts.nowPages = page;
+                    // contracts.nowPages = page;
                 }else{
                     // alert(result.message)
                     goErrorPage(result.code);
@@ -382,7 +351,7 @@
             $.ajax({
                 type: "POST",
                 dataType: "json",
-                url: apiuri + "/admin/system/etherescan/addcontracts",
+                url: apiurl + "/admin/system/etherescan/addcontracts",
                 xhrFields: {withCredentials: true},
                 crossDomain: true,
                 data: {
@@ -403,7 +372,7 @@
                         $(".el-textarea__inner").val("")
 
                     }
-                    getContracts(app.contracts.nowPages);
+                    getContracts(contracts.nowPages);
                 },
                 error: function (result) {
                     $(".el-textarea__inner").val("")
