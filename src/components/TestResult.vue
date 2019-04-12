@@ -6,139 +6,28 @@
         <p class="mTitle animated fadeInUpBig" style="animation-duration: 1s;">{{$t('testresult.title')}}</p>
         <div class="line animated fadeInUpBig" style="animation-delay: 0.3s;"></div>
       </div>
-
+      <!-- class="layui-this" -->
       <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-            <ul class="layui-tab-title">
-                <li class="layui-this">
+            <ul class="layui-tab-title" :oyente="oyente">
+                <li v-for="item in oyente.data" @click="select(item.x)"> 
                   <div>
-                    <p>1 security/enforce-explicit-visibility</p>
-                    <p class="text_warning">warning</p>
+                    <p>{{ item.type }}</p>
+                    <p :class="item.level=='warning'?'text_warning':item.level=='error'?'text_danger':''">{{ item.level }}</p>
                   </div>
                   <div>
-                    <p>No visibility specified explicitly for totalSupply function</p>
-                    <p class="text_warning">line:19</p>
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <p>2 security/enforce-explicit-visibility</p>
-                    <p class="text_warning">warning</p>
-                  </div>
-                  <div>
-                    <p>No visibility specified explicitly for totalSupply function</p>
-                    <p class="text_warning">line:19</p>
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <p>3 security/enforce-explicit-visibility</p>
-                    <p class="text_warning">warning</p>
-                  </div>
-                  <div>
-                    <p>No visibility specified explicitly for totalSupply function</p>
-                    <p class="text_warning">line:19</p>
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <p>4 security/enforce-explicit-visibility</p>
-                    <p class="text_warning">warning</p>
-                  </div>
-                  <div>
-                    <p>No visibility specified explicitly for totalSupply function</p>
-                    <p class="text_warning">line:19</p>
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <p>5 security/enforce-explicit-visibility</p>
-                    <p class="text_warning">warning</p>
-                  </div>
-                  <div>
-                    <p>No visibility specified explicitly for totalSupply function</p>
-                    <p class="text_warning">line:19</p>
+                    <p>{{ item.msg }}</p>
+                    <p class="text_warning">line:  {{ item.x }}</p>
                   </div>
                 </li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
-                  <div style="position:relative;z-index: 3;">
+                  <div style="position:relative;z-index: 3;" class="codeContent">
                         <textarea ref="mycode" id="code" name="code">
-                          pragma solidity ^0.4.18;
 
-                          /**
-                          * Math operations with safety checks
-                          */
-                          contract SafeMath {
-                            function safeMul(uint256 a, uint256 b) internal pure returns (uint256) {
-                              if (a == 0) {
-                                return 0;
-                              }
-                              uint256 c = a * b;
-                              assert(c / a == b);
-                              return c;
-                            }
-
-                            function safeDiv(uint256 a, uint256 b) internal pure returns (uint256) {
-                              assert(b > 0);
-                              uint256 c = a / b;
-                              assert(a == b * c + a % b);
-                              return c;
-                            }
-
-                            function safeSub(uint256 a, uint256 b) internal pure returns (uint256) {
-                              assert(b <= a);
-                              return a - b;
-                            }
-
-                            function safeAdd(uint256 a, uint256 b) internal pure returns (uint256) {
-                              uint256 c = a + b;
-                              assert(c>=a && c>=b);
-                              return c;
-                            }
-                          }
-
-                          contract Token is SafeMath{
-
-                              function balanceOf(address _owner) public constant returns (uint256 balance);
-
-                              function transfer(address _to, uint256 _value) public returns (bool success);
-
-                              function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
-
-                              function approve(address _spender, uint256 _value) public returns (bool success);
-
-                              function allowance(address _owner, address _spender) public constant returns (uint256 remaining);
-
-                              event Transfer(address indexed _from, address indexed _to, uint256 _value);
-
-                              event Approval(address indexed _owner, address indexed _spender, uint256 _value);
-                          }
-
-                          function balanceOf(address _owner) public constant returns (uint256 balance) {
-                              return balances[_owner];
-                          }
-
-                          /* Allow another contract to spend some tokens in your behalf */
-                          //允许_spender多次取用帐户，最高达_value金额
-                          function approve(address _spender, uint256 _value) public returns (bool success)
-                          {
-                              allowed[msg.sender][_spender] = _value;
-                              Approval(msg.sender, _spender, _value);
-                              return true;
-                          }
-
-                          function allowance(address _owner, address _spender) public constant returns (uint256 remaining) {
-                              return allowed[_owner][_spender];       //查询并返回_spender仍然被允许从_owner提取的金额，即授权余额
-                          }
-
-                          </textarea>
+                        </textarea>
                   </div>
                 </div>
-                <div class="layui-tab-item">内容2</div>
-                <div class="layui-tab-item">内容3</div>
-                <div class="layui-tab-item">内容4</div>
-                <div class="layui-tab-item">内容5</div>
             </div>
       </div>
     </section>
@@ -146,6 +35,11 @@
   </div>
 </template>
 <script>
+    var oyenteResult;
+    var showmsgflag = false;
+    var myerrors = new Map();
+    var editor;
+
   import "codemirror/theme/ambiance.css";
   import "codemirror/lib/codemirror.css";
   import "codemirror/addon/hint/show-hint.css";
@@ -169,56 +63,126 @@
     },
     data() {
       return {
-        tabPosition: 'left'
+        oyente:{
+            nowselect:-1,
+            data:[]
+        },
+        oyenteerror: [],        
+        tabPosition: 'left',
       }
     },
     mounted() {
       this.checkoutList();
-      this.codeMirror();
+      // this.codeMirror();
     },
     methods: {
       //检测结果选项卡
       checkoutList(){
+        var id = getParameter('id');
+        console.log(id);
+        this.axios({
+          url: apiurl + "/admin/file/getoyente/" + id,
+          dataType: "json",
+          method: "get",
+          headers: {
+            "Content-Type":"application/json;charset=utf-8"
+          },
+          withCredentials : true,
+          params:{
+            id: this.id
+          }
+        }).then(res => {
+              // console.log(res.data);
+              if(res.data.code == 0 && res.data.data != null){
+                // console.log(res.data);
+                oyenteResult = res.data;
+                console.log(oyenteResult);
+                this.codeMirror();
+              // this.tableData.splice(index, 1);
+              // getContracts(this.contracts.nowPages);
+              }else{
+                this.$message.info("没有查到该合约的检测结果。");
+              }
+          }).catch(()=>{})
+
         layui.use('element', function(){
           var element = layui.element;
-          $.ajax({
-            type: "get",
-            url: "url",
-            dataType: "json",
-            success: function (res) {
-              var resData = res.data;
-              $.each(resData, function (index, item) { 
-                 
-              });
-            }
-          });
+
         });
       },
       //代码在线编辑
       codeMirror(){
-        let theme = 'ambiance';
-        let editor = CodeMirror.fromTextArea(this.$refs.mycode, {
-          mode: 'javascript',
-          indentWithTabs: true,
-          smartIndent: true,
-          lineNumbers: true,
-          scrollbarStyle: 'null',
-          matchBrackets: true,
-          theme: theme,
-          // autofocus: true,
-          extraKeys: {'Ctrl': 'autocomplete'},//自定义快捷键
-          hintOptions: {//自定义提示选项
-            tables: {
-              users: ['name', 'score', 'birthDate'],
-              countries: ['name', 'population', 'size']
+        var resulthtml = "";
+        $('#code').empty();
+        var status = oyenteResult.data.status;
+        if(status == 1){
+          var codecontent = oyenteResult.data.code;
+          // console.log(codecontent);
+          let theme = 'ambiance';
+          editor = CodeMirror.fromTextArea(this.$refs.mycode, {
+            mode: 'javascript',
+            indentWithTabs: true,
+            smartIndent: true,
+            lineNumbers: true,
+            styleActiveLine: true, // 当前行背景高亮
+            scrollbarStyle: 'null',
+            matchBrackets: true,
+            theme: theme,
+            // autofocus: true,
+            extraKeys: {'Ctrl': 'autocomplete'},//自定义快捷键
+            hintOptions: {//自定义提示选项
+              tables: {
+                users: ['name', 'score', 'birthDate'],
+                countries: ['name', 'population', 'size']
+              }
             }
+          });
+          editor.setValue(codecontent);
+          editor.setSize('100%','550px');
+          //代码自动提示功能
+          editor.on('cursorActivity', function () {
+            editor.showHint()
+          })
+          var results = oyenteResult.data.results;
+          for (var j = 0; j < results.length; j++) {
+              // console.log(results);
+              var w = results[j];
+              // console.log(w);
+              for(var i = 0; i < w.errors.length;i++){
+                  var error = w.errors[i];
+                  // console.log(error);
+                  // var num = myerrors.get(error.level);
+                  // console.log(num);
+                  // myerrors.set(error.level, num > 0 ? num + 1 : 1);
+                  var arr = {};
+                  arr.x = w.x;
+                  arr.level = error.level;
+                  arr.msg = error.msg;
+                  arr.type = error.type;
+                  // console.log(arr);
+                  this.oyenteerror.push(arr);
+                  // console.log(this.oyenteerror);
+                  editor.addLineClass(w.x-1,"class",error.level);
+              }
+              // showErrormsg(w);
           }
-        });
-        editor.setSize('100%','550px');
-        //代码自动提示功能
-        editor.on('cursorActivity', function () {
-          editor.showHint()
-        })
+
+          this.oyente.data = this.oyenteerror;
+          // console.log(this.oyente.data);
+          // this.select(linenum);
+        }else if(status == 2) {
+            alert("检测失败");
+            resulthtml += "检测失败<br>";
+            resulthtml += oyenteResult.msg;
+        }
+      },
+      //定位指定wraning行
+      select(linenum){
+        // console.log(111);
+        this.oyente.nowselect = linenum;
+        editor.scrollIntoView(linenum-1);
+        // console.log(this.oyente.nowselect);
+        // console.log(editor.scrollIntoView(linenum-1));
       }
     }
 }
@@ -249,6 +213,7 @@
 }
 .layui-tab-title li p{word-wrap:break-word!important;}
 .layui-tab-title li + li{  border-top: 1px solid #fff;}
+.layui-tab-title li:last-child{border-bottom: 1px solid #fff;}
 .layui-tab-title .layui-this{color: #fff;background: #2E90D2;}
 .layui-tab-brief>.layui-tab-title .layui-this{color: #fff;}
 .layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after{

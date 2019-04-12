@@ -9,7 +9,8 @@
     <!--工具条-->
       <el-form :inline="true">
         <el-row :span="24">
-          <el-col :span="12" class="animated bounceInLeft" style="text-align:left">
+          <!-- 上传文件、添加合约 -->
+          <el-col :span="24" class="animated bounceInLeft" style="text-align:left">
             <el-form-item>
                 <el-button type="" @click="uploadDialog = true" icon="el-icon-upload">{{$t('testing.from.upLoad')}}</el-button>
             </el-form-item>
@@ -19,14 +20,15 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="12" class="animated bounceInRight" style="text-align:right">
+          <!-- 搜索框 -->
+          <!-- <el-col :span="12" class="animated bounceInRight" style="text-align:right">
             <el-form-item>
-              <el-input :placeholder="$t('testing.from.searchholder')" style="width:300px;"></el-input>
+              <el-input type="search" v-model="search" :placeholder="$t('testing.from.searchholder')" style="width:300px;"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="" @click="" icon="el-icon-search">{{$t('testing.from.searchBtn')}}</el-button>
             </el-form-item>
-          </el-col>
+          </el-col> -->
 
         </el-row>
       </el-form>
@@ -41,8 +43,11 @@
             :file-list="fileList"
             :http-request="uploadFile" 
             :on-exceed="handleExceed"
+            :on-remove="handleRemove"
+            :before-remove="beforeRemove"
             accept=''
-            action="string">
+            action=""
+            multiple>
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
             <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
@@ -56,7 +61,7 @@
 
       <!-- 添加合约地址dialog -->
       <el-dialog title="添加合约地址" :visible.sync="addressDialog" width="26%" :append-to-body='true' style="text-align:center;">
-        <el-input type="textarea" placeholder="请输入合约地址" v-model="form.desc"></el-input>
+        <el-input type="input" placeholder="请输入合约地址" v-model="form.desc">{{ form.desc }}</el-input>
         <div slot="footer" class="dialog-footer">
           <el-button @click="addressDialog = false">取 消</el-button>
           <el-button type="primary" @click="submitAddAddress">确 定</el-button>
@@ -80,24 +85,22 @@
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0.6)"
         :data="tableData" tooltip-effect="dark" align="left"
-        @selection-change="selsChange">
+        @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column :label="$t('testing.List.num')" width="80">
               <template slot-scope="scope">{{ scope.row.id }}</template>
             </el-table-column>
-            <el-table-column prop="name" :label="$t('testing.List.contractName')" show-overflow-tooltip width="380">
+            <el-table-column prop="tableName" :label="$t('testing.List.contractName')" show-overflow-tooltip width="380">
               <template slot-scope="scope">{{ scope.row.filename }}</template>
             </el-table-column>
-            <el-table-column prop="time" :label="$t('testing.List.addTime')" width="170">
+            <el-table-column prop="tableTime" :label="$t('testing.List.addTime')" width="170">
               <template slot-scope="scope">{{ scope.row.loaddate }}</template>
             </el-table-column>
-            <el-table-column prop="statue" :label="$t('testing.List.statues')" width="140">
+            <el-table-column prop="tableStatue" :label="$t('testing.List.statues')" width="140">
               <template slot-scope="scope">
                 <span class="text_success" v-if="scope.row.analysisstatus == 1">检测成功</span>
                 <span class="text_danger" v-else-if="scope.row.analysisstatus == 2">检测失败</span>
                 <span class="text_wraning" v-else>待检测</span>
-                <!-- {{ scope.row.analysisstatus==1?'检测成功':scope.row.analysisstatus==2?'检测失败':'待检测' }} -->
-                
               </template>
             </el-table-column>
             <el-table-column :label="$t('testing.List.operations')">
@@ -108,7 +111,10 @@
                 <el-button
                   size="mini" icon="el-icon-delete"
                   @click="handleDelete(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.del')}}</el-button>
-                <el-button
+                <el-button v-if="scope.row.wordStatus==0 && scope.row.analysisstatus==1"
+                  size="mini" icon="el-icon-document" 
+                  @click="produceword(scope.$index, scope.row)">生成报告</el-button>
+                <el-button v-if="scope.row.wordStatus==1 && scope.row.analysisstatus==1"
                   size="mini" icon="el-icon-download"
                   @click="handleDownload(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.download')}}</el-button>
               </template>
@@ -118,10 +124,17 @@
       <!--工具条-->
       <el-row :span="24" style="padding: 20px 0;">
         <el-col :span="12" class="toolbar" style="text-align:left;">
-          <el-button @click="batchRemove" :disabled="this.sels.length===0" style="text-align:left">{{$t('testing.from.allDel')}}</el-button>
+          <el-button @click="batchRemove()" :disabled="this.multipleSelection.length===0" style="text-align:left">{{$t('testing.from.allDel')}}</el-button>
         </el-col>
         <el-col :span="12" style="text-align:left;">
-          <el-pagination :span="12"  background layout="prev, pager, next" @current-change="" :page-size="7" :total="50" style="float:right;" >
+          <el-pagination :span="12"  background 
+          layout="total, prev, pager, next"
+          :current-page="currentPage" 
+          :page-size="pageSize"
+          :total="total"
+          @current-change="handleCurrentChange" 
+          @size-change="handleSizeChange"
+          style="float:right;" >
           </el-pagination>
         </el-col>
       </el-row>
@@ -130,11 +143,12 @@
 </template>
 
 <script>
-  var pageSize = 10;
-  var nowPage = 0;
-  var delid = 0;
+  // var pageSize = 10;
+  // var nowPage = 0;
+  // var delid = 0;
 
   import $ from 'jquery'
+  import qs from 'qs';
 
   export default {
     data() {
@@ -146,73 +160,154 @@
         form: {
           desc: ''
         },
-        filters: {
-          name: ''
-        },
-        // total: 0,
+        search: '',
         // page: 1,
-        delid: '',
+        currentPage: 1,
+        pageSize: 10,
+        total: 0,
+        id: 0,
         listLoading: false,
         tableData: [],
-        nowPages: nowPage,
-        contents: [],
-        sels: [],//列表选中列
-        addFormVisible: false,//新增界面是否显示
-        addLoading: false,
-        addFormRules: {
-          name: [
-            { required: true, message: '请输入姓名', trigger: 'blur' }
-          ]
-        },
-        fileList: [],
         multipleSelection: [],
+        ids: [], //批量删除id
+        sels: [],//列表选中列
+        fileList: [],
         uploadDialog: false,
         addressDialog: false,
         delDialog: false
       }
     },
     mounted() {
-      this.loadList();
-      this.getContracts(1);
+      this.getListData(1);
     },
     created(){
-
+      // this.getListData(1);
+      // this.handleSizeChange()
+    },
+    computed: {
+      //模糊搜索
+      // tables() {                
+      //     const search = this.search               
+      //     if (search) {                    
+      //         return this.tableData.filter(dataNews => {                        
+      //             return Object.keys(dataNews).some(key => {                            
+      //                 return String(dataNews[key]).toLowerCase().indexOf(search) > -1                        
+      //             })                    
+      //         })                
+      //     }                
+      //     return this.tableData; 
+      //                
+      // }
     },
     methods: {
-      getContracts(page) {     
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: apiurl+"/admin/file/getallbyuser",
-            xhrFields: {withCredentials: true},
-            crossDomain: true,
-            data: {
-                page: page,
-                pageSize: pageSize
-            },
-            success:function(result){
-                this.contents = result.data;
-                this.nowPages = page;
-                // console.log(this.content)
-                // console.log(this.nowPages)
-            }
-          });
+      //切换数据
+      handleSizeChange(val) {
+          this.pageSize = val;
+          this.currentPage = 1;
+          this.getListData(1, val);
+          // console.log(`每页: ${val}条`);
       },
-      //列表加载
-      loadList(){
-        // console.log("列表加载");
-        this.axios.get(apiurl+"/admin/system/file/getall?page=1&pageSize=10", {
-              headers: {
-                "Content-Type":"application/json;charset=utf-8"
-              },
-              withCredentials : true
-            })
-            .then(res => {
-              // console.log(res.data);
-              console.log(res.data.data.content);
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.getListData(val, this.pageSize);
+        // console.log(`当前页: ${val}`);
+      },
+      //获取列表
+      getListData(page) {
+        this.listLoading = true;
+        this.axios.get(apiurl + "/admin/system/file/getall", {
+              params:{
+                  page: page,
+                  pageSize: this.pageSize
+              }
+          }).then(res => {
                 this.tableData = res.data.data.content;
+                this.total = res.data.data.totalElements;
+                this.listLoading = false;
+                // console.log(this.tableData);
+                // this.contracts.data = res.data.data;
+                // console.log(this.contracts.data);
+                // this.contracts.nowPages = page;
+                // console.log(res.data);
+
+          }).catch(error => {})
+      },
+      // 单行删除
+      handleDelete(index){
+          let _this = this;
+          _this.id = this.tableData[index].id;
+          // console.log(_this.id);
+          _this.$confirm(
+          "确认删除该智能合约的检测信息？", {
+              confirmButtonText: "确定",
+              cancelbuttonText: "取消",
+              type: "warning"
+          })
+          .then(() => {
+              this.axios({
+                  url: apiurl + "/admin/file/delfile",
+                  dataType: "json",
+                  method: "post",
+                  headers: {
+                    "Content-Type":"application/json;charset=utf-8"
+                  },
+                  withCredentials : true,
+                  params:{
+                    id: _this.id
+                  }
+                }).then(res => {
+                      // console.log(res.data);
+                      if(res.data.code == 0 ){
+                        this.$message({
+                          type: "success",
+                          message: "删除成功"
+                        })
+                        this.getListData(this.currentPage);
+                      // this.tableData.splice(index, 1);
+                      // getContracts(this.contracts.nowPages);
+                      }
+                  })
+          })
+          .catch(() => {
+              this.$message({
+                  type: "info",
+                  message: "已取消删除"
+              })
+          })
+      },
+      //批量删除
+      batchRemove() {
+          var _this = this;
+          let selData = _this.multipleSelection;
+          selData.forEach( element => {
+            _this.ids.push(element.id)
+          })
+          console.log(_this.ids);
+          var data = qs.stringify({id : _this.ids});
+
+          _this.$confirm('确认删除所选中项?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+              _this.axios.post(apiurl + "/admin/file/delfile",data,{
+                headers:{'Content-Type':'application/x-www-form-urlencoded'}
+              }).then(res => {
+                  // console.log(res.data);
+                  if(res.data.code == 0 ){
+                    this.$message.success("删除成功");
+                    this.getListData(this.currentPage);
+                  // this.tableData.splice(index, 1);
+                  // getContracts(this.contracts.nowPages);
+                  }else{
+                    this.$message.error("删除失败");
+                  }
+              }).catch( err => {
+                console.log(err);
+              })
+          }).catch((err) => {
+                _this.$message.info("已取消删除");
             })
-            .catch(error => {})
       },
       //取消全选
       toggleSelection(rows) {
@@ -226,82 +321,40 @@
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
+        console.log(this.multipleSelection);
+        if (this.multipleSelection.length == 0) {   
+          this.multipleSelectionFlag = false;
+        }
       },
       selsChange(sels) {
         this.sels = sels;
       },
-      //批量删除
-      batchRemove() {
-        var ids = this.sels.map(item => item.id).toString();
-        this.$confirm('确认删除选中记录吗？', '提示', {
-          type: 'warning'
-        })
-        .then(() => {
-          this.listLoading = true;
-          //NProgress.start();
-          let para = { ids: ids };
-          batchRemoveUser(para).then((res) => {
-            this.listLoading = false;
-            //NProgress.done();
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            });
-            this.getUsers();
-          });
-        })
-        .catch(() => {
-
-        });
-      },
-      // 删除
-      handleDelete(index){
-        this.$confirm(
-          "确认删除该智能合约的检测信息？",
-          {
-            confirmButtonText: "确定",
-            cancelbuttonText: "取消",
-            type: "warning"
-          }
-        )
-        .then(() => {
-          var id = this.tableData[index].id;
-          console.log(id);
-          this.axios
-            .post(apiurl +"/admin/file/delfile", this.$qs.stringify({ id: id }), {
-              headers: {
-                "Content-Type":"application/json;charset=utf-8"
-              },
-              withCredentials : true              
-            })
-            .then(res => {
-              console.log(res.data);
-              // if(res.data.code == 0 ){
-                this.tableData.splice(index, 1);
-                this.$message({
-                  type: "success",
-                  message: "删除成功"
-                })
-                getContracts(this.contracts.nowPages);
-              // }
-            })
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          })          
-        })
-      },
       //查看
       handleSee(index) {
-        var id = this.tableData[index].id
+        var id = this.tableData[index].id;
         location.href = "/TestResult?id="+id;
-        // let routeUrl = this.$router.resolve({
-        //      path: "/TestResult",
-        //     //  query: id
-        // });
-        // window.open(routeUrl .href, '_blank');
+      },
+      //生成报告
+      produceword(index) {
+        var id = this.tableData[index].id;
+        this.axios({
+          url: apiurl + "/admin/file/getword/" + id,
+          dataType: "json",
+          method: "get",
+          headers: {
+            "Content-Type":"application/json;charset=utf-8"
+          },
+          withCredentials : true,
+        }).then(res => {
+              // console.log(res.data);
+                this.$message({
+                  type: "success",
+                  message: "已生成报告"
+                })
+                this.getListData(this.currentPage);
+                // this.listLoading = false;
+                // this.tableData.splice(index, 1);
+        }).catch(()=>{})
       },
       //下载报告
       handleDownload(index){
@@ -312,7 +365,6 @@
       submitUpload() {
         let list = $('.el-upload-list__item.is-ready');
         console.log(list);
-        
         if(list.length == 0){
           this.$message({
             type:'warning',
@@ -322,76 +374,62 @@
         }
         this.$refs.upload.submit();
       },
+      //上传文件接口
       uploadFile(param){
         var fileObj = param.file;
-        // FormData 对象
+        console.log(fileObj);
         var form = new FormData();
-        // 文件对象
-        form.append("file", fileObj);
-        form.append("userId", this.userId);
-        form.append("userName", this.userName);
-        this.axios.get('url',form).then(res => {
-          if(res.data.success == true){
-            this.$message({
-              type:'success',
-              message:res.data.msg
-            })
-            this.fileList =[]
-          } else {
-            this.$message({
-              type:'success',
-              message:res.data.msg
-            })
-              this.fileList =[]
-          }
-        })
+        form.append("uploadfile", fileObj);
+        this.axios.post(apiurl + '/admin/file/upload', form)
+          .then(res => {
+            if(res.data.code == 0){
+              this.uploadDialog = false;
+              this.$message.success("文件上传成功");
+              this.getListData(this.currentPage);
+              this.fileList = [];
+            } else {
+              this.$message.error("文件上传失败,错误信息：" + data.message);
+              this.getListData(this.currentPage);
+              this.fileList = [];
+            }
+          })
+          .catch( res => {
+            this.fileList = [];
+            // this.$message.info("已取消上传");
+          })
+      },
+      handleRemove(file, fileList) {
+        return this.$confirm.success("移除成功");
       },
       handleExceed(files, fileList) {
         this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
       },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      },
       // 添加合约
       submitAddAddress(){
-        var address = $(".el-textarea__inner").val();
-
+        var address = this.form.desc;
+        // console.log(this.form.desc);
         if (address != null && address != "" && address.length > 0) {
-            var addressarray = address.split("\n")
-            var alladdress = "";
-            for(var i=0;i<addressarray.length;i++){
-                alladdress += addressarray[i];
-                if(alladdress.length>0){
-                    alladdress +="&";
-                }
-            }
-            $.ajax({
-                type: "POST",
-                dataType: "json",
-                url: apiurl + "/admin/system/etherescan/addcontracts",
-                xhrFields: {withCredentials: true},
-                crossDomain: true,
-                data: {
-                    address: alladdress
-                },
-                success: function (result) {
-                    console.log(result)
-                    if (result.code == 0) {
-                        this.$message({
-                          type:'success',
-                          message: '添加成功'
-                        })
-                    } else {
-                        this.$message({
-                          type:'error',
-                          message: '添加失败，请检查合约地址是否正确'
-                        })
-                        $(".el-textarea__inner").val("")
-
-                    }
-                    getContracts(contracts.nowPages);
-                },
-                error: function (result) {
-                    $(".el-textarea__inner").val("")
-                }
-            });
+            var data = qs.stringify({address : this.form.desc});
+            this.axios.post(apiurl + "/admin/system/etherescan/addcontracts", data, 
+            {
+              headers:{'Content-Type':'application/x-www-form-urlencoded'}
+            }).then(res => {
+                  if (res.data.code == 0) {
+                    this.addressDialog = false;
+                    this.$message.success("添加成功");
+                  } else {
+                    this.$message.error("添加失败，请检查合约地址是否正确");
+                    this.form.desc = '';
+                  }
+                  this.getListData(this.currentPage);
+            }).catch((res)=>{
+              this.form.desc = '';
+              // this.$message.info("已取消添加");
+            })
+            
         } else {
             this.$message.error("请输入合约地址");
         }

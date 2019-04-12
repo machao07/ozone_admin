@@ -53,7 +53,7 @@
       },
       data(){
         return{
-          code: sessionStorage.getItem('code')
+          code: localStorage.getItem('code')
         }
       },
       mouted(){
@@ -69,10 +69,12 @@
           this.$confirm('确认退出吗?', '提示', {
             //type: 'warning'
           }).then(() => {
-            sessionStorage.removeItem('code');
+            localStorage.removeItem('code');
             location.href = "/";
             // _this.$router.push('/');
-          }).catch(() => {});
+          }).catch(() => {
+            location.href = "/login"
+            });
         },
         getLoginUser() {
           $.ajax({
@@ -83,8 +85,8 @@
               crossDomain: true,
               success: function(result) {
                   // console.log(result);
-                  sessionStorage.setItem("code", result.code);
-                  console.log(sessionStorage.getItem("code"));
+                  localStorage.setItem("code", result.code);
+                  console.log(localStorage.getItem("code"));
                   if (result.code == 0) {
                       // console.log(result.data.username);
                       $("#username").html(result.data.username);
@@ -92,10 +94,7 @@
                       location.href = "/login";
                   }
               },
-              error: function(result) {
-                  location.href = "/login";
-                  return;
-              }
+              error: function(result) {}
           });
         }
       }

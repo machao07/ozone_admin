@@ -16,6 +16,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import qs from 'qs';
 
+
 Vue.use(ElementUI)
 Vue.use(ElementUI, { locale })
 Vue.use(canvas)
@@ -25,8 +26,7 @@ Vue.use(VueRouter)
 Vue.use(VueAxios, axios)
 Vue.prototype.$qs = qs;
 
-
-
+axios.defaults.withCredentials = true
 Vue.config.productionTip = false
 
 // const router = new VueRouter({
