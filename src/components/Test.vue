@@ -90,7 +90,7 @@
             <el-table-column :label="$t('testing.List.num')" width="80">
               <template slot-scope="scope">{{ scope.row.id }}</template>
             </el-table-column>
-            <el-table-column prop="tableName" :label="$t('testing.List.contractName')" show-overflow-tooltip width="380">
+            <el-table-column prop="tableName" :label="$t('testing.List.contractName')" show-overflow-tooltip width="370">
               <template slot-scope="scope">{{ scope.row.filename }}</template>
             </el-table-column>
             <el-table-column prop="tableTime" :label="$t('testing.List.addTime')" width="170">
@@ -98,9 +98,9 @@
             </el-table-column>
             <el-table-column prop="tableStatue" :label="$t('testing.List.statues')" width="140">
               <template slot-scope="scope">
-                <span class="text_success" v-if="scope.row.analysisstatus == 1">检测成功</span>
-                <span class="text_danger" v-else-if="scope.row.analysisstatus == 2">检测失败</span>
-                <span class="text_wraning" v-else>待检测</span>
+                <span class="text_success" v-if="scope.row.analysisstatus == 1">{{$t('testing.List.statuesbtn.suc')}}</span>
+                <span class="text_danger" v-else-if="scope.row.analysisstatus == 2">{{$t('testing.List.statuesbtn.fail')}}</span>
+                <span class="text_wraning" v-else>{{$t('testing.List.statuesbtn.un')}}</span>
               </template>
             </el-table-column>
             <el-table-column :label="$t('testing.List.operations')">
@@ -113,7 +113,7 @@
                   @click="handleDelete(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.del')}}</el-button>
                 <el-button v-if="scope.row.wordStatus==0 && scope.row.analysisstatus==1"
                   size="mini" icon="el-icon-document" 
-                  @click="produceword(scope.$index, scope.row)">生成报告</el-button>
+                  @click="produceword(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.product')}}</el-button>
                 <el-button v-if="scope.row.wordStatus==1 && scope.row.analysisstatus==1"
                   size="mini" icon="el-icon-download"
                   @click="handleDownload(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.download')}}</el-button>

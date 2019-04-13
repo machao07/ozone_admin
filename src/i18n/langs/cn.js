@@ -55,12 +55,13 @@ const cn = {
             operationsBtn: {
                 'see': "查看",
                 'del': "删除",
-                'download': '下载报告'
+                'download': '下载报告',
+                'product': '生成报告'
             },
             statuesbtn: {
-                '0': '未检测',
-                '1': '检测成功',
-                '2': '检测失败'
+                'un': '未检测',
+                'suc': '检测成功',
+                'fail': '检测失败'
             }
         }
     },

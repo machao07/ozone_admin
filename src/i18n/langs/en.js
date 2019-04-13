@@ -55,12 +55,13 @@ const en = {
             operationsBtn: {
                 'see': "Inquiry",
                 'del': "Delete",
-                'download': 'Download Report'
+                'download': 'Download Report',
+                'product': 'Generate Report'
             },
             statuesbtn: {
-                '0': 'Undetected',
-                '1': 'Successful Detection',
-                '2': 'Failure Detection'
+                'un': 'Undetected',
+                'suc': 'Success',
+                'fail': 'Fail'
             }
         }
     },

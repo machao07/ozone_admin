@@ -82,7 +82,7 @@
             success: function (result) {
                 this.loading = false;
                 console.log(result.code);
-                if(result.code==0){
+                if(result.code == 0){
                     // this.$router.push('/')
                     location.href = "/";
                 }else{

@@ -53,14 +53,14 @@
       },
       data(){
         return{
-          code: localStorage.getItem('code')
+          code: sessionStorage.getItem('code')
         }
       },
       mouted(){
         
       },
       created(){
-        this.getLoginUser();
+        // this.getLoginUser();
       },
       methods: {
         //退出登录
@@ -69,34 +69,34 @@
           this.$confirm('确认退出吗?', '提示', {
             //type: 'warning'
           }).then(() => {
-            localStorage.removeItem('code');
+            sessionStorage.removeItem('code');
             location.href = "/";
             // _this.$router.push('/');
           }).catch(() => {
             location.href = "/login"
             });
         },
-        getLoginUser() {
-          $.ajax({
-              type: "GET",
-              dataType: "json",
-              url: apiurl + "/admin/usermsg",
-              xhrFields: { withCredentials: true },
-              crossDomain: true,
-              success: function(result) {
-                  // console.log(result);
-                  localStorage.setItem("code", result.code);
-                  console.log(localStorage.getItem("code"));
-                  if (result.code == 0) {
-                      // console.log(result.data.username);
-                      $("#username").html(result.data.username);
-                  } else {
-                      location.href = "/login";
-                  }
-              },
-              error: function(result) {}
-          });
-        }
+        // getLoginUser() {
+        //   $.ajax({
+        //       type: "GET",
+        //       dataType: "json",
+        //       url: apiurl + "/admin/usermsg",
+        //       xhrFields: { withCredentials: true },
+        //       crossDomain: true,
+        //       success: function(result) {
+        //           // console.log(result);
+        //           sessionStorage.setItem("code", result.code);
+        //           console.log(sessionStorage.getItem("code"));
+        //           if (result.code == 0) {
+        //               // console.log(result.data.username);
+        //               $("#username").html(result.data.username);
+        //           } else {
+        //               location.href = "/login";
+        //           }
+        //       },
+        //       error: function(result) {}
+        //   });
+        // }
       }
     }
 </script>
