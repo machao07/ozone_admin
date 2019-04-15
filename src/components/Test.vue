@@ -148,7 +148,7 @@
   // var delid = 0;
 
   import $ from 'jquery'
-  import qs from 'qs';
+  import qs from 'qs'
 
   export default {
     data() {

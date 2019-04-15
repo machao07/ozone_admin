@@ -13,7 +13,7 @@
           </el-col>
 
           <!-- 未登录 -->
-          <el-col :span="4" v-show="code != 0">
+          <el-col :span="4" v-show="account == null || data == null">
               <el-button size="small">
                 <router-link :to="{name: 'Login'}">{{$t('login.btn')}}</router-link>
               </el-button>
@@ -23,7 +23,7 @@
           </el-col>
 
           <!-- 登录后 -->
-          <el-col :span="4" class="userinfo" v-show="code == 0">
+          <el-col :span="4" class="userinfo" v-show="account != null && data != null">
             <el-dropdown trigger="hover">
               <span class="el-dropdown-link userinfo-inner">
                 <img src="../assets/images/default.jpg" />
@@ -53,14 +53,15 @@
       },
       data(){
         return{
-          code: sessionStorage.getItem('code')
+          account: localStorage.getItem('account'),
+          data: sessionStorage.getItem('data')
         }
       },
       mouted(){
         
       },
       created(){
-        // this.getLoginUser();
+        
       },
       methods: {
         //退出登录
@@ -69,34 +70,33 @@
           this.$confirm('确认退出吗?', '提示', {
             //type: 'warning'
           }).then(() => {
-            sessionStorage.removeItem('code');
-            location.href = "/";
+              $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: apiurl +"/user/logout",
+                xhrFields: {withCredentials: true},
+                crossDomain: true,
+                success: function (result) {
+                  localStorage.removeItem('account');
+                  console.log(result);
+                  if(result.code == 0){
+                    location.href = "/";
+                    // localStorage.removeItem('account');
+                    return;
+                  }
+                },
+                error: function (result) {
+                    location.href = "/";
+                    return;
+                }
+            });
+            // sessionStorage.removeItem('code');
+            // location.href = "/";
             // _this.$router.push('/');
           }).catch(() => {
-            location.href = "/login"
-            });
-        },
-        // getLoginUser() {
-        //   $.ajax({
-        //       type: "GET",
-        //       dataType: "json",
-        //       url: apiurl + "/admin/usermsg",
-        //       xhrFields: { withCredentials: true },
-        //       crossDomain: true,
-        //       success: function(result) {
-        //           // console.log(result);
-        //           sessionStorage.setItem("code", result.code);
-        //           console.log(sessionStorage.getItem("code"));
-        //           if (result.code == 0) {
-        //               // console.log(result.data.username);
-        //               $("#username").html(result.data.username);
-        //           } else {
-        //               location.href = "/login";
-        //           }
-        //       },
-        //       error: function(result) {}
-        //   });
-        // }
+            this.$message.info("已取消退出");
+          });
+        }
       }
     }
 </script>

@@ -9,7 +9,7 @@
     <div class="wrapper-login">
       <div class="from-wrapper">
           <h2><font size="5">{{$t('login.title')}}</font></h2>
-          <el-form :model="loginForm" :rules="fieldRules" ref="loginForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
+          <el-form :model="loginForm" :rules="loginFormRules" ref="loginForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
               <el-form-item prop="account">
                   <el-input type="text" id="account" v-model="loginForm.account" auto-complete="off" :placeholder="$t('login.nameholder')"></el-input>
               </el-form-item>
@@ -19,10 +19,10 @@
               <!-- <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox> -->
               <el-form-item>
                 <!-- <el-button type="primary" style="width:48%;" @click.native.prevent="reset">重 置</el-button> -->
-                <el-button type="primary" style="width:100%;" @click.native.prevent="login" :loading="logining">{{$t('login.btn')}}</el-button>
+                <el-button type="primary" style="width:100%;" @click.native.prevent="login()" :loading="logining">{{$t('login.btn')}}</el-button>
               </el-form-item>
               <el-form-item>
-                <p class="login" @click="login">{{$t('login.subtitle1')}}<router-link :to="{name: 'Register'}"><font color="#1E95FE">{{$t('login.subtitle2')}}</font></router-link></p>
+                <p class="register" >{{$t('login.subtitle1')}}<router-link :to="{name: 'Register'}"><font color="#1E95FE">{{$t('login.subtitle2')}}</font></router-link></p>
               </el-form-item>
           </el-form>
           <div class="footer-wrapper">
@@ -35,6 +35,7 @@
 
 <script>
   import Language from '@/components/Language'
+  import qs from 'qs'
 
   export default {
     name: 'Login',
@@ -48,7 +49,7 @@
           account: '', 
           password: '' 
         },
-        fieldRules: {
+        loginFormRules: {
           account: [
             { required: true, message: '请输入账号', trigger: 'blur' },
           ],
@@ -59,51 +60,50 @@
         checked: true
       };
     },
+    mounted(){
+      // this.$nextTick(() => {
+      //   this.getLoginUser();
+      // })
+    },
     created(){
-      // this.haslogin();
+      
     },
     methods: {
       login() {
-        var account = $("#account").val();
-        var pwd = $("#password").val();
-        if(!account.endsWith("@mozi.one")){
-            pwd = hex_md5(pwd);
-        }
-        this.loading = true;
-        // this.$router.push('/')  // 登录成功，跳转到主页
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            url: apiurl +"/user/login",
-            data:{
-                account: account,
-                password: pwd
-            },
-            success: function (result) {
-                this.loading = false;
-                console.log(result.code);
-                if(result.code == 0){
-                    // this.$router.push('/')
-                    location.href = "/";
-                }else{
-                    alert(result.message);
-                }
+        this.$refs.loginForm.validate((valid) => {
+            if(valid){
+                this.logining = true;
+                let logindata = qs.stringify(this.loginForm);
+                localStorage.setItem('account',this.loginForm.account);
+                localStorage.setItem('user',logindata);
+                console.log(localStorage.getItem('account'));
+                console.log(logindata);
+                
+                this.axios.post(apiurl + "/user/login",logindata)
+                    .then((res) => {
+                        console.log(res);
+                        // return;
+                        if (res.data.code == 0) {
+                            // this.$router.push('/')
+                            this.logining = false;
+                            // sessionStorage.setItem('user', this.loginForm.account);
+                            // this.$router.push('/')
+                            location.href = "/";
+                        } else {
+                            // alert(res.message);
+                            this.logining = false;
+                            console.log(res.data.message);
+                            this.$alert(res.data.message, 'info', {
+                                confirmButtonText: 'ok'
+                            })
+                        }                           
+                    })
+            }else{
+                console.log('error submit!');
+                return false;
             }
-        });
-      },
-      // haslogin(){
-      //     this.axios.get(apiurl + "/admin/usermsg",{
-      //         "account": this.account, 
-      //         "password": this.password
-      //         })
-      //         .then(res => {
-      //           console.log(res.data);
-      //           // console.log(res.data.code);
-      //           localStorage.setItem("code", res.data.code);
-      //           // console.log(localStorage.getItem("code", res.data.code));
-      //           console.log(res);
-      //         })
-      // }
+        })
+      }
     }
   }
 </script>
