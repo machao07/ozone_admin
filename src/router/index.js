@@ -7,6 +7,7 @@ import Home from '@/views/Home'
 // import Footer from '@/components/Footer'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
+import Password from '@/views/Password'
 // import HomeContent from '@/components/HomeContent'
 import Test from '@/components/Test'
 import TestResult from '@/components/TestResult'
@@ -52,6 +53,12 @@ export default new Router({
             name: 'Register',
             component: Register,
             meta: { title: '智能合约检测平台注册页面' }
+        },
+        {
+            path: '/Password',
+            name: 'Password',
+            component: Password,
+            meta: { title: '智能合约检测平台修改密码' }
         },
         {
             path: '/',

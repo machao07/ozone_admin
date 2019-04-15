@@ -22,6 +22,12 @@ const en = {
         'subtitle1': 'Do you have an account? ',
         'subtitle2': 'Login immediately'
     },
+    change: {
+        'oldpassholder': 'Please enter the current password',
+        'passholder': 'Please enter a new password',
+        'repassholder': 'Please enter the new password again',
+        'btn': 'Confirm Change'
+    },
     menu: {
         'home': 'Home',
         'testing': 'Testing',

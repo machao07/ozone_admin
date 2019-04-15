@@ -22,6 +22,12 @@ const cn = {
         'subtitle1': '已有账号？',
         'subtitle2': '立即登录'
     },
+    change: {
+        'oldpassholder': '请输入当前密码',
+        'passholder': '请输入新密码',
+        'repassholder': '请再次输入新密码',
+        'btn': '确认修改'
+    },
     menu: {
         'home': '首页',
         'testing': '检测',

@@ -29,13 +29,13 @@
                     <el-input id="password" type="password" v-model="form.password" auto-complete="off" :placeholder="$t('register.passholder')"></el-input>
                 </el-form-item>
                 <el-form-item prop="repassword">
-                    <el-input id="repassword" type="repassword" v-model="form.repassword" auto-complete="off" :placeholder="$t('register.passconfirm')"></el-input>
+                    <el-input id="repassword" type="password" v-model="form.repassword" auto-complete="off" :placeholder="$t('register.passconfirm')"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="register" style="width:100%;">{{$t('register.btn')}}</el-button>
+                    <el-button type="primary" @click="register" :loading="registing" style="width:100%;">{{$t('register.btn')}}</el-button>
                 </el-form-item>
                 <el-form-item>
-                    <p class="login" @click="gotoLogin">{{$t('register.subtitle1')}}<router-link :to="{name: 'Login'}"><font color="#1E95FE">{{$t('register.subtitle2')}}</font></router-link></p>
+                    <p class="login" @click="gotoLogin">{{$t('register.subtitle1')}}<font color="#1E95FE">{{$t('register.subtitle2')}}</font></p>
                 </el-form-item>
             </el-form>
             <div class="footer-wrapper">
@@ -48,6 +48,8 @@
 
 <script>
 import Language from '@/components/Language'
+import qs from 'qs'
+
 export default {
   name: "register",
   components:{
@@ -55,6 +57,7 @@ export default {
   },
   data() {
     return {
+        registing: false,
         form:{
             account: '', 
             username:'',
@@ -86,33 +89,41 @@ export default {
       var repassword = $.trim($("#repassword").val());
 
       if(account.endsWith("@mozi.one")){
-          alert("禁止使用以 @mozi.one 结尾的账号 ");
+          this.$alert("禁止使用以 @mozi.one 结尾的账号 ",'info', {
+            confirmButtonText: 'ok'
+          });
           return;
       }
 
       var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
       if(reg.test(account)){
-          alert("账号禁止使用中文！");
+          this.$alert("账号禁止使用中文！", '提示', {
+            confirmButtonText: '确定'
+          });
           return;
       }
 
       if(password!=repassword){
-          alert("两次密码输入不一致")
+          this.$alert("两次密码输入不一致", '提示', {
+            confirmButtonText: '确定'
+          })
           return;
       }
 
-      axios.post(apiuri + "/user/register",{
-        account: account,
-        username: username,
-        password: password
-      })
+      this.registing = true;
+      let form = qs.stringify(this.form);
+      this.axios.post(apiurl + "/user/register",form)
       .then(res => {
-        if(result.code==0){
-            $alert("恭喜您，注册成功，请进行登录！");
-            location.href="login";
+        console.log(res);
+        if(res.status == 200){
+            this.registing = false;
+            this.$alert("恭喜您，注册成功，请进行登录！",'提示',{
+              confirmButtonText: '确定'
+            });
+            location.href="/login";
             return;
         }else{
-            $alert(result.message)
+            this.$alert(res.message)
         }
       })
     },

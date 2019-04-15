@@ -31,7 +31,7 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>我的消息</el-dropdown-item>
-                <el-dropdown-item>设置</el-dropdown-item>
+                <el-dropdown-item divided @click.native="changePassword">修改密码</el-dropdown-item>
                 <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -61,7 +61,7 @@
         
       },
       created(){
-        
+
       },
       methods: {
         //退出登录
@@ -96,6 +96,9 @@
           }).catch(() => {
             this.$message.info("已取消退出");
           });
+        },
+        changePassword(){
+          this.$router.push('/Password');
         }
       }
     }
