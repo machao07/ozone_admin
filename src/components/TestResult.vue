@@ -6,29 +6,34 @@
         <p class="mTitle animated fadeInUpBig" style="animation-duration: 1s;">{{$t('testresult.title')}}</p>
         <div class="line animated fadeInUpBig" style="animation-delay: 0.3s;"></div>
       </div>
+      <!-- 统计 -->
+      <el-row :span="24" class="total">
+          <el-col :span="24" id="resultHtml"></el-col>
+      </el-row>
+
       <!-- class="layui-this" -->
       <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-            <ul class="layui-tab-title" :oyente="oyente">
-                <li v-for="item in oyente.data" @click="select(item.x)"> 
-                  <div>
-                    <p>{{ item.type }}</p>
-                    <p :class="item.level=='warning'?'text_warning':item.level=='error'?'text_danger':''">{{ item.level }}</p>
-                  </div>
-                  <div>
-                    <p>{{ item.msg }}</p>
-                    <p class="text_warning">line:  {{ item.x }}</p>
-                  </div>
-                </li>
-            </ul>
-            <div class="layui-tab-content">
-                <div class="layui-tab-item layui-show">
-                  <div style="position:relative;z-index: 3;" class="codeContent">
-                        <textarea ref="mycode" id="code" name="code">
+        <ul class="layui-tab-title" :oyente="oyente">
+            <li v-for="item in oyente.data" @click="select(item.x)"> 
+              <div>
+                <p>{{ item.type }}</p>
+                <p :class="item.level=='warning'?'text_warning':item.level=='error'?'text_danger':''">{{ item.level }}</p>
+              </div>
+              <div>
+                <p>{{ item.msg }}</p>
+                <p class="text_warning">line:  {{ item.x }}</p>
+              </div>
+            </li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+              <div style="position:relative;z-index: 3;" class="codeContent">
+                  <textarea ref="mycode" id="code" name="code">
 
-                        </textarea>
-                  </div>
-                </div>
+                  </textarea>
+              </div>
             </div>
+        </div>
       </div>
     </section>
     <Footer></Footer>
@@ -51,6 +56,7 @@
   require("codemirror/mode/javascript/javascript");
   require("codemirror/addon/edit/matchbrackets");
   require("codemirror/addon/selection/active-line");
+  require("codemirror/keymap/sublime");
   require("codemirror/addon/hint/javascript-hint");
   // require("codemirror/addon/hint/show-hint");
   // require("codemirror/mode/sql/sql");
@@ -79,7 +85,7 @@
       //检测结果选项卡
       checkoutList(){
         var id = getParameter('id');
-        console.log(id);
+        // console.log(id);
         this.axios({
           url: apiurl + "/admin/file/getoyente/" + id,
           dataType: "json",
@@ -128,6 +134,7 @@
             scrollbarStyle: 'null',
             matchBrackets: true,
             theme: theme,
+            keyMap: "sublime",
             // autofocus: true,
             extraKeys: {'Ctrl': 'autocomplete'},//自定义快捷键
             hintOptions: {//自定义提示选项
@@ -140,9 +147,9 @@
           editor.setValue(codecontent);
           editor.setSize('100%','550px');
           //代码自动提示功能
-          editor.on('cursorActivity', function () {
-            editor.showHint()
-          })
+          // editor.on('cursorActivity', function () {
+          //   editor.showHint()
+          // })
           var results = oyenteResult.data.results;
           for (var j = 0; j < results.length; j++) {
               // console.log(results);
@@ -150,10 +157,11 @@
               // console.log(w);
               for(var i = 0; i < w.errors.length;i++){
                   var error = w.errors[i];
-                  // console.log(error);
-                  // var num = myerrors.get(error.level);
+                  console.log(error);
+                  var num = myerrors.get(error.level);
                   // console.log(num);
-                  // myerrors.set(error.level, num > 0 ? num + 1 : 1);
+                  myerrors.set(error.level, num > 0 ? num + 1 : 1);
+
                   var arr = {};
                   arr.x = w.x;
                   arr.level = error.level;
@@ -171,10 +179,20 @@
           // console.log(this.oyente.data);
           // this.select(linenum);
         }else if(status == 2) {
-            alert("检测失败");
+            $("#code").css({"display":"none"});
+            this.$alert("检测失败,点击确认返回检测列表",'提示', {
+              callback: action => {
+                location.href="/Test";
+              }
+            });
             resulthtml += "检测失败<br>";
             resulthtml += oyenteResult.msg;
         }
+
+        for (var [key, value] of myerrors) {
+            resulthtml += key + "：共" + value + "个<br>"
+        }
+        $("#resultHtml").html(resulthtml)
       },
       //定位指定wraning行
       select(linenum){
@@ -189,9 +207,10 @@
 </script>
 
 <style>
+  .total{margin-top: 40px;color:#00FFFF;font-size: 16px;line-height: 1.8;}
   .layui-tab{
     height:568px;
-    margin: 40px 0 30px 0;
+    margin: 20px 0 30px 0;
     border: 1px solid #fff;
   }
   .layui-tab-title li{
@@ -238,6 +257,9 @@
 }
 
 /* code */
+.error{background: #800080;}
+.warning{background: #8B4513;}
+textarea#code{background-color: transparent!important;border: none!important;}
 .cm-s-ambiance.CodeMirror{background: rgba(52,60,79,.3);box-shadow:none;}
 .cm-s-ambiance .CodeMirror-gutters { background: rgba(52,60,79,.3);}
 .cm-s-ambiance .CodeMirror-linenumber{color:#d0d0d0;}
