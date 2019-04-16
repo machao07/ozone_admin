@@ -84,19 +84,22 @@
         element-loading-text="加载中"
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0.6)"
-        :data="tableData" tooltip-effect="dark" align="left"
-        @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="40"></el-table-column>
+        :data="tableData" tooltip-effect="dark" align="left">
+        <!-- @selection-change="handleSelectionChange" -->
+            <!-- <el-table-column type="selection" width="40"></el-table-column> -->
             <el-table-column :label="$t('testing.List.num')" width="80">
               <template slot-scope="scope">{{ scope.row.id }}</template>
             </el-table-column>
-            <el-table-column prop="tableName" :label="$t('testing.List.contractName')" show-overflow-tooltip width="370">
+            <!-- 370 -->
+            <el-table-column prop="tableName" :label="$t('testing.List.contractName')" show-overflow-tooltip width="390">
               <template slot-scope="scope">{{ scope.row.filename }}</template>
             </el-table-column>
-            <el-table-column prop="tableTime" :label="$t('testing.List.addTime')" width="170">
+            <!-- 170 -->
+            <el-table-column prop="tableTime" :label="$t('testing.List.addTime')" width="180">
               <template slot-scope="scope">{{ scope.row.loaddate }}</template>
             </el-table-column>
-            <el-table-column prop="tableStatue" :label="$t('testing.List.statues')" width="140">
+            <!-- 140 -->
+            <el-table-column prop="tableStatue" :label="$t('testing.List.statues')" width="150">
               <template slot-scope="scope">
                 <span class="text_success" v-if="scope.row.analysisstatus == 1">{{$t('testing.List.statuesbtn.suc')}}</span>
                 <span class="text_danger" v-else-if="scope.row.analysisstatus == 2">{{$t('testing.List.statuesbtn.fail')}}</span>
@@ -123,10 +126,10 @@
       </div>
       <!--工具条-->
       <el-row :span="24" style="padding: 20px 0;">
-        <el-col :span="12" class="toolbar" style="text-align:left;">
+        <!-- <el-col :span="12" class="toolbar" style="text-align:left;">
           <el-button @click="batchRemove()" :disabled="this.multipleSelection.length===0" style="text-align:left">{{$t('testing.from.allDel')}}</el-button>
-        </el-col>
-        <el-col :span="12" style="text-align:left;">
+        </el-col> -->
+        <el-col :span="24" style="text-align:left;">
           <el-pagination :span="12"  background 
           layout="total, prev, pager, next"
           :current-page="currentPage" 
@@ -420,11 +423,12 @@
                   if (res.data.code == 0) {
                     this.addressDialog = false;
                     this.$message.success("添加成功");
+                    this.getListData(this.currentPage);
                   } else {
                     this.$message.error("添加失败，请检查合约地址是否正确");
+                    this.getListData(this.currentPage);
                     this.form.desc = '';
                   }
-                  this.getListData(this.currentPage);
             }).catch((res)=>{
               this.form.desc = '';
               // this.$message.info("已取消添加");
@@ -453,6 +457,6 @@
   .el-table--enable-row-hover .el-table__body tr:hover>td {
       background: none;
   }
-  .el-table_1_column_2 {text-align:center!important;}
+  /* .el-table_1_column_2 {text-align:center!important;} */
   .el-dialog__footer{text-align: center;}
 </style>

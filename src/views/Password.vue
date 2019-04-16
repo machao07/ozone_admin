@@ -36,12 +36,24 @@
 <script>
 import Language from '@/components/Language'
 import qs from 'qs'
+import { setTimeout } from 'timers';
 
 export default {
     components:{
       'Language': Language
     },
     data(){
+        var validatePass = (rule, value, callback) => {
+            if (value === "") {
+                callback(this.$alert("请输入密码"));
+            } else {
+                if (this.changeForm.repassword !== "") {
+                    this.$refs.changeForm.validateField("repassword");
+                }
+                callback();
+            }
+        };
+
         var validatePass2 = (rule, value, callback) => {
            if (value === "") {
             callback(this.$alert("请再次输入密码"));
@@ -63,7 +75,7 @@ export default {
                 { required: true, message: '请输入当前密码', trigger: 'blur' },
             ],
             password: [
-                { required: true, message: '请输入新密码', trigger: 'blur' },
+                { required: true, message: '请输入新密码',validator: validatePass, trigger: 'blur' },
             ],
             repassword: [
                 { required: true, message: '请再次输入新密码',validator: validatePass2, trigger: 'blur' },
@@ -78,6 +90,7 @@ export default {
     methods:{
         //修改密码
         change(){
+            this.changing = true;
             var obj = {
                 // username: this.username,
                 // oldpwd: this.changeForm.oldpassword,
@@ -88,11 +101,14 @@ export default {
             this.axios.post(apiurl + "/admin/user/updatepwd", objdata)
             .then(res => {
                 if (res.status == 200) {
+                    this.changing = false;
                     this.$message({
-                        message: "保存成功",
+                        message: "保存成功,即将跳转重新登录",
                         type: "success"
                     });
-                    this.$router.push("/");
+                    setTimeout(() => {
+                        this.$router.push("/login");
+                    },1800)
                 } else {
                     this.$message({
                         message: "修改失败" + res.message,

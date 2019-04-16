@@ -117,10 +117,12 @@ export default {
         console.log(res);
         if(res.status == 200){
             this.registing = false;
-            this.$alert("恭喜您，注册成功，请进行登录！",'提示',{
-              confirmButtonText: '确定'
+            this.$alert("恭喜您，注册成功，请点击确定进行登录！",'提示',{
+              confirmButtonText: '确定',
+              callback: action => {
+                location.href="/login";
+              }
             });
-            location.href="/login";
             return;
         }else{
             this.$alert(res.message)
