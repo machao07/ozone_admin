@@ -208,37 +208,23 @@
 
 <style>
   .total{margin-top: 40px;color:#00FFFF;font-size: 16px;line-height: 1.8;}
-  .layui-tab{
-    height:568px;
-    margin: 20px 0 30px 0;
-    border: 1px solid #fff;
-  }
+  .layui-tab{height:568px;margin: 20px 0 30px 0;border: 1px solid #fff;}
+  .layui-tab-title li{display: block;}
+  .layui-tab-title{float: left;width: 26%;min-height: 568px;overflow-y: auto;}
+  .layui-tab-content{float: left;width: 72%;}
+  .layui-tab-title{white-space: normal;}
   .layui-tab-title li{
-      display: block;
+    text-align:left;line-height:1.8;padding: 8px 15px;border-right: 1px solid #fff;
   }
-  .layui-tab-title{
-      float: left;
-      width: 26%;
-      min-height: 568px;
-      overflow-y: auto;
+  .layui-tab-title li p{word-wrap:break-word!important;}
+  .layui-tab-title li + li{  border-top: 1px solid #fff;}
+  .layui-tab-title li:last-child{border-bottom: 1px solid #fff;}
+  .layui-tab-title .layui-this{color: #fff;background: #2E90D2;}
+  .layui-tab-brief>.layui-tab-title .layui-this{color: #fff;}
+  .layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after{
+    display: none;
   }
-  .layui-tab-content{
-      float: left;
-      width: 72%;
-  }
-.layui-tab-title{white-space: normal;}
-.layui-tab-title li{
-  text-align:left;line-height:1.8;padding: 8px 15px;border-right: 1px solid #fff;
-}
-.layui-tab-title li p{word-wrap:break-word!important;}
-.layui-tab-title li + li{  border-top: 1px solid #fff;}
-.layui-tab-title li:last-child{border-bottom: 1px solid #fff;}
-.layui-tab-title .layui-this{color: #fff;background: #2E90D2;}
-.layui-tab-brief>.layui-tab-title .layui-this{color: #fff;}
-.layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after{
-  display: none;
-}
-.layui-tab-title .layui-this:after{border: none;}
+  .layui-tab-title .layui-this:after{border: none;}
 
 /*滚动条样式*/
 .layui-tab-title::-webkit-scrollbar {/*滚动条整体样式*/

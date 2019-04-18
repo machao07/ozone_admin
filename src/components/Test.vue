@@ -443,9 +443,7 @@
 </script>
 
 <style>
-  .title .sTitle{
-    font-size:14px;
-  }
+  .title .sTitle{font-size:14px;}
   .el-form{margin-top: 5rem;}
   .tableLine{border: 1px solid #fff;border-radius:5px;padding: 10px 15px;margin:0 auto;max-width:1170px;width:100%;}
   .el-table{background-color: transparent;color: #b5bbc1;}

@@ -30,14 +30,12 @@ axios.defaults.withCredentials = true
 Vue.config.productionTip = false
 
 // const router = new VueRouter({
-//   routes
+//     routes
 // })
-//
-
 
 // let router = VueRouter({
-//      mode:'history',
-//      routes:routes
+//     mode: 'history',
+//     routes: routes
 // });
 
 
