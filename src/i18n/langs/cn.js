@@ -23,6 +23,7 @@ const cn = {
         'subtitle2': '立即登录'
     },
     change: {
+        'title': '修改密码',
         'oldpassholder': '请输入当前密码',
         'passholder': '请输入新密码',
         'repassholder': '请再次输入新密码',
@@ -34,6 +35,11 @@ const cn = {
         'monitor': '监测',
         'track': '追踪',
         'reportTube': '报管'
+    },
+    dropdown: {
+        'me': '个人中心',
+        'change': '修改密码',
+        'logout': '退出登录'
     },
     homeMsg: {
         'title': '区块链智能合约安全检测平台',

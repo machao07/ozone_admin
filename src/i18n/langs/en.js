@@ -23,6 +23,7 @@ const en = {
         'subtitle2': 'Login immediately'
     },
     change: {
+        'title': 'Change Password',
         'oldpassholder': 'Please enter the current password',
         'passholder': 'Please enter a new password',
         'repassholder': 'Please enter the new password again',
@@ -34,6 +35,11 @@ const en = {
         'monitor': 'Monitor',
         'track': 'Track',
         'reportTube': 'Report Tube'
+    },
+    dropdown: {
+        'me': 'Personal Center',
+        'change': 'Change Password',
+        'logout': 'Logout'
     },
     homeMsg: {
         'title': 'Blockchain Smart Contract Security Checking System',

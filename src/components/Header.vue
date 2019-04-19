@@ -30,9 +30,9 @@
                 <span id="username"></span>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>我的消息</el-dropdown-item>
-                <el-dropdown-item divided @click.native="changePassword">修改密码</el-dropdown-item>
-                <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+                <!-- <el-dropdown-item>我的消息</el-dropdown-item> -->
+                <el-dropdown-item @click.native="changePassword">{{$t('dropdown.change')}}</el-dropdown-item>
+                <el-dropdown-item divided @click.native="logout">{{$t('dropdown.logout')}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-col>

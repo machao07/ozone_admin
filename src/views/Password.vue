@@ -8,7 +8,7 @@
     </el-row>
     <div class="wrapper-login">
       <div class="from-wrapper">
-          <h2><font size="5">修改密码</font></h2>
+          <h2><font size="5">{{$t('change.title')}}</font></h2>
           <el-form :model="changeForm" :rules="changeFormRules" ref="changeForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
               <el-form-item prop="oldpassword">
                   <el-input type="password" name="oldpassword" v-model="changeForm.oldpassword" auto-complete="off" :placeholder="$t('change.oldpassholder')"></el-input>
