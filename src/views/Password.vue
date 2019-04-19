@@ -10,9 +10,9 @@
       <div class="from-wrapper">
           <h2><font size="5">{{$t('change.title')}}</font></h2>
           <el-form :model="changeForm" :rules="changeFormRules" ref="changeForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
-              <el-form-item prop="oldpassword">
+              <!-- <el-form-item prop="oldpassword">
                   <el-input type="password" name="oldpassword" v-model="changeForm.oldpassword" auto-complete="off" :placeholder="$t('change.oldpassholder')"></el-input>
-              </el-form-item>
+              </el-form-item> -->
               <el-form-item prop="password">
                   <el-input type="password" name="password" v-model="changeForm.password" auto-complete="off" :placeholder="$t('change.passholder')"></el-input>
               </el-form-item>
@@ -26,7 +26,7 @@
 
           </el-form>
           <div class="footer-wrapper">
-              M<span>o</span>ac | Ozone
+              M<span>o</span>ac | <router-link :to="{name: 'Home'}" @click.native="refresh" title="Go Home">Ozone</router-link>
           </div>
       </div>
     </div>
@@ -66,14 +66,14 @@ export default {
         return{
         changing: false,
         changeForm: {
-          oldpassword: '', 
+        //   oldpassword: '', 
           password: '' ,
           repassword: ''
         },
         changeFormRules: {
-            oldpassword: [
-                { required: true, message: '请输入当前密码', trigger: 'blur' },
-            ],
+            // oldpassword: [
+            //     { required: true, message: '请输入当前密码', trigger: 'blur' },
+            // ],
             password: [
                 { required: true, message: '请输入新密码',validator: validatePass, trigger: 'blur' },
             ],
@@ -100,7 +100,7 @@ export default {
             let objdata = qs.stringify(obj);
             this.axios.post(apiurl + "/admin/user/updatepwd", objdata)
             .then(res => {
-                if (res.status == 200) {
+                if (res.data.code == 0) {
                     this.changing = false;
                     this.$message({
                         message: "保存成功,即将跳转重新登录",
@@ -110,8 +110,9 @@ export default {
                         this.$router.push("/login");
                     },1800)
                 } else {
+                    this.changing = false;
                     this.$message({
-                        message: "修改失败" + res.message,
+                        message: "修改失败" + res.data.message,
                         type: "error"
                     });
                 }
@@ -119,6 +120,9 @@ export default {
             .catch(res => {
                 console.log(res.message)
             })
+        },
+        refresh(){
+            this.$router.go(0); 
         }
     }
 }
