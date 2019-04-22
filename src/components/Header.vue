@@ -5,7 +5,7 @@
           <el-col :span="12">
             <el-menu :default-active="$route.path" router class="el-menu-demo" mode="horizontal" background-color="transparent" text-color="#fff" active-text-color="#ffd04b">
               <el-menu-item index="/" default-active>{{$t('menu.home')}}</el-menu-item>
-              <el-menu-item index="/Test">{{$t('menu.testing')}}</el-menu-item>
+              <el-menu-item index="/test">{{$t('menu.testing')}}</el-menu-item>
               <el-menu-item index="/404">{{$t('menu.monitor')}}</el-menu-item>
               <el-menu-item index="/404">{{$t('menu.track')}}</el-menu-item>
               <el-menu-item index="/404">{{$t('menu.reportTube')}}</el-menu-item>
@@ -15,10 +15,10 @@
           <!-- 未登录 -->
           <el-col :span="4" v-show="account == null || data == null">
               <el-button size="small">
-                <router-link :to="{name: 'Login'}">{{$t('login.btn')}}</router-link>
+                <router-link :to="{name: 'login'}">{{$t('login.btn')}}</router-link>
               </el-button>
               <el-button size="small">
-                <router-link :to="{name: 'Register'}">{{$t('register.btn')}}</router-link>
+                <router-link :to="{name: 'register'}">{{$t('register.btn')}}</router-link>
                 </el-button>
           </el-col>
 
@@ -98,7 +98,7 @@
           });
         },
         changePassword(){
-          this.$router.push('/Password');
+          this.$router.push('/password');
         }
       }
     }
@@ -106,7 +106,7 @@
 
 <style>
   .el-menu.el-menu--horizontal{
-    border-bottom: none;
+    border-bottom: none!important;
   }
   .el-menu--horizontal{
     border-bottom: none;

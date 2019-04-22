@@ -21,7 +21,8 @@ function getLoginUser() {
                 // console.log(result.data.username);
                 $("#username").html(result.data.username);
             } else {
-                location.href = "/login";
+                console.log(result);
+                // location.href = "/login";
             }
         },
         error: function(result) {

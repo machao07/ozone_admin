@@ -43,20 +43,20 @@ export default new Router({
             }
         },
         {
-            path: '/Login',
-            name: 'Login',
+            path: '/login',
+            name: 'login',
             component: Login,
             meta: { title: '智能合约检测平台登录页面' }
         },
         {
-            path: '/Register',
-            name: 'Register',
+            path: '/register',
+            name: 'register',
             component: Register,
             meta: { title: '智能合约检测平台注册页面' }
         },
         {
-            path: '/Password',
-            name: 'Password',
+            path: '/password',
+            name: 'password',
             component: Password,
             meta: { title: '智能合约检测平台修改密码' }
         },

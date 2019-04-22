@@ -245,8 +245,8 @@
 .error{background: #800080;}
 .warning{background: #8B4513;}
 textarea#code{background-color: transparent!important;border: none!important;}
-.cm-s-ambiance.CodeMirror{background: rgba(52,60,79,.3);box-shadow:none;}
-.cm-s-ambiance .CodeMirror-gutters { background: rgba(52,60,79,.3);}
+.cm-s-ambiance.CodeMirror{background: rgba(52,60,79,.3)!important;box-shadow:none;}
+.cm-s-ambiance .CodeMirror-gutters { background: rgba(52,60,79,.3)!important;}
 .cm-s-ambiance .CodeMirror-linenumber{color:#d0d0d0;}
 
 </style>

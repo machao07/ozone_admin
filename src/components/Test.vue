@@ -335,7 +335,8 @@
       //查看
       handleSee(index) {
         var id = this.tableData[index].id;
-        location.href = "/TestResult?id="+id;
+        this.$router.push({path:'/testResult',query:{id:id}});
+        // location.href = "/TestResult?id="+id;
       },
       //生成报告
       produceword(index) {
@@ -446,14 +447,14 @@
   .title .sTitle{font-size:14px;}
   .el-form{margin-top: 5rem;}
   .tableLine{border: 1px solid #fff;border-radius:5px;padding: 10px 15px;margin:0 auto;max-width:1170px;width:100%;}
-  .el-table{background-color: transparent;color: #b5bbc1;}
-  .el-table::before{display: none;}
-  .el-table thead{color: #fff;}
-  .el-table th, .el-table tr{background-color: transparent;}
-  .el-table td, .el-table th.is-leaf{border: none;}
-  .el-table tr:hover{background: none;}
+  .el-table{background-color: transparent!important;color: #b5bbc1!important;}
+  .el-table::before{display: none!important;}
+  .el-table thead{color: #fff!important;}
+  .el-table th, .el-table tr{background-color: transparent!important;}
+  .el-table td, .el-table th.is-leaf{border: none!important;}
+  .el-table tr:hover{background: none!important;}
   .el-table--enable-row-hover .el-table__body tr:hover>td {
-      background: none;
+      background: none!important;
   }
   /* .el-table_1_column_2 {text-align:center!important;} */
   .el-dialog__footer{text-align: center;}
