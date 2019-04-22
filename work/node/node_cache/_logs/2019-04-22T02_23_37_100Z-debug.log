@@ -1,0 +1,21 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'D:\\work\\node\\node.exe',
+1 verbose cli   'D:\\work\\node\\node_global\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'build',
+1 verbose cli   'prod' ]
+2 info using npm@6.9.0
+3 info using node@v10.15.3
+4 info build D:\work\project\ozone_admin\prod
+5 verbose stack Error: ENOENT: no such file or directory, open 'D:\work\project\ozone_admin\prod\package.json'
+6 verbose cwd D:\work\project\ozone_admin
+7 verbose Windows_NT 10.0.17134
+8 verbose argv "D:\\work\\node\\node.exe" "D:\\work\\node\\node_global\\node_modules\\npm\\bin\\npm-cli.js" "build" "prod"
+9 verbose node v10.15.3
+10 verbose npm  v6.9.0
+11 error path D:\work\project\ozone_admin\prod\package.json
+12 error code ENOENT
+13 error errno -4058
+14 error syscall open
+15 error enoent ENOENT: no such file or directory, open 'D:\work\project\ozone_admin\prod\package.json'
+16 error enoent This is related to npm not being able to find a file.
+17 verbose exit [ -4058, true ]
