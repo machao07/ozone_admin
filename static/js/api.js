@@ -15,7 +15,8 @@ function getLoginUser() {
         success: function(result) {
             // console.log(result);
             sessionStorage.setItem("data", result.data);
-            // sessionStorage.setItem("data", result.data);
+            // sessionStorage.setItem("code", result.code);
+            sessionStorage.setItem("islogin", result.code);
             console.log(sessionStorage.getItem("data"));
             if (result.code == 0) {
                 sessionStorage.setItem("user", result.data.username);
@@ -31,22 +32,3 @@ function getLoginUser() {
         }
     });
 }
-
-
-// function goErrorPage(code) {
-//     console.log(code);
-//     if (code == 1001) { //没有登录
-//         location.href = "/login";
-//     } else if (code == 1002) { //无权限 尚未登录
-//         location.href = "/login";
-//     } else if (code == -2) { //系统错误
-//         location.href = "/404";
-//     }
-// }
-
-// function getParameter(name) {
-//     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-//     var r = window.location.search.substr(1).match(reg);
-//     if (r != null) return unescape(r[2]);
-//     return null;
-// }

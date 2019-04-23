@@ -85,9 +85,6 @@
                         // return;
                         if (res.data.code == 0) {
                             // this.$router.push('/')
-                            this.logining = false;
-                            // sessionStorage.setItem('user', this.loginForm.account);
-                            // this.$router.push('/')
                             location.href = "/";
                         } else {
                             // alert(res.message);

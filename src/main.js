@@ -38,6 +38,20 @@ Vue.config.productionTip = false
 //     routes: routes
 // });
 
+//全局路由守卫
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.isLogin)) { // 判断该路由是否需要登录权限
+        console.log(sessionStorage.getItem('islogin'));
+        if (sessionStorage.getItem('islogin') == 0) {
+            next();
+        } else {
+            next('/login')
+        }
+    } else {
+        next();
+    }
+});
+
 
 /* eslint-disable no-new */
 new Vue({

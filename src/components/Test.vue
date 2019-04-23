@@ -113,7 +113,7 @@
                     size="mini" icon="el-icon-view" 
                     @click="handleSee(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.see')}}</el-button>
 
-                <!-- <router-link :to="{path:'/testResult',query:{id:id}}">
+                <!-- <router-link :to="{path:'/testResult',query:{id:scope.row.id}}">
                   <el-button
                     size="mini" icon="el-icon-view">{{$t('testing.List.operationsBtn.see')}}</el-button>
                 </router-link> -->
@@ -230,15 +230,10 @@
                   pageSize: this.pageSize
               }
           }).then(res => {
+                console.log(res);
                 this.tableData = res.data.data.content;
                 this.total = res.data.data.totalElements;
-                // this.id = this.tableData[index].id;
                 this.listLoading = false;
-                // console.log(this.tableData);
-                // this.contracts.data = res.data.data;
-                // console.log(this.contracts.data);
-                // this.contracts.nowPages = page;
-                // console.log(res.data);
 
           }).catch(error => {})
       },

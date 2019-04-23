@@ -72,13 +72,21 @@ export default new Router({
             children: [{
                 path: '/test',
                 component: Test,
-                name: 'test'
+                name: 'test',
+                meta: {
+                    title: '',
+                    isLogin: true,
+                }
             }]
         },
         {
             path: '/testResult',
             name: 'testResult',
-            component: TestResult
+            component: TestResult,
+            meta: {
+                title: '',
+                isLogin: true,
+            }
         }
     ]
 })
