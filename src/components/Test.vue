@@ -108,9 +108,15 @@
             </el-table-column>
             <el-table-column :label="$t('testing.List.operations')">
               <template slot-scope="scope">
+
                 <el-button
-                  size="mini" icon="el-icon-view"
-                  @click="handleSee(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.see')}}</el-button>
+                    size="mini" icon="el-icon-view" 
+                    @click="handleSee(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.see')}}</el-button>
+
+                <!-- <router-link :to="{path:'/testResult',query:{id:id}}">
+                  <el-button
+                    size="mini" icon="el-icon-view">{{$t('testing.List.operationsBtn.see')}}</el-button>
+                </router-link> -->
                 <el-button
                   size="mini" icon="el-icon-delete"
                   @click="handleDelete(scope.$index, scope.row)">{{$t('testing.List.operationsBtn.del')}}</el-button>
@@ -168,7 +174,7 @@
         currentPage: 1,
         pageSize: 10,
         total: 0,
-        id: 0,
+        id: '',
         listLoading: false,
         tableData: [],
         multipleSelection: [],
@@ -226,6 +232,7 @@
           }).then(res => {
                 this.tableData = res.data.data.content;
                 this.total = res.data.data.totalElements;
+                // this.id = this.tableData[index].id;
                 this.listLoading = false;
                 // console.log(this.tableData);
                 // this.contracts.data = res.data.data;

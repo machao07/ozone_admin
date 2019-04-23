@@ -51,6 +51,7 @@
   import Header from '@/components/Header'
   import Footer from '@/components/Footer'
   import $ from 'jquery'
+  import qs from 'qs'
   
   let CodeMirror = require("codemirror/lib/codemirror");
   require("codemirror/mode/javascript/javascript");
@@ -74,7 +75,7 @@
             data:[]
         },
         oyenteerror: [],        
-        tabPosition: 'left',
+        tabPosition: 'left'
       }
     },
     mounted() {
@@ -84,8 +85,8 @@
     methods: {
       //检测结果选项卡
       checkoutList(){
-        var id = getParameter('id');
-        // console.log(id);
+        let id = this.$route.query.id;
+        console.log(id);
         this.axios({
           url: apiurl + "/admin/file/getoyente/" + id,
           dataType: "json",
@@ -95,7 +96,7 @@
           },
           withCredentials : true,
           params:{
-            id: this.id
+            id: id
           }
         }).then(res => {
               // console.log(res.data);
@@ -156,7 +157,7 @@
               // console.log(w);
               for(var i = 0; i < w.errors.length;i++){
                   var error = w.errors[i];
-                  console.log(error);
+                  // console.log(error);
                   var num = myerrors.get(error.level);
                   // console.log(num);
                   myerrors.set(error.level, num > 0 ? num + 1 : 1);
@@ -181,7 +182,8 @@
             $("#code").css({"display":"none"});
             this.$alert("检测失败,点击确认返回检测列表",'提示', {
               callback: action => {
-                location.href="/Test";
+                this.$router.push('/test');
+                // location.href="/test";
               }
             });
             resulthtml += "检测失败<br>";
@@ -245,8 +247,8 @@
 .error{background: #800080;}
 .warning{background: #8B4513;}
 textarea#code{background-color: transparent!important;border: none!important;}
-.cm-s-ambiance.CodeMirror{background: rgba(52,60,79,.3)!important;box-shadow:none;}
+.cm-s-ambiance.CodeMirror{background: rgba(52,60,79,.3)!important;box-shadow:none!important;}
 .cm-s-ambiance .CodeMirror-gutters { background: rgba(52,60,79,.3)!important;}
-.cm-s-ambiance .CodeMirror-linenumber{color:#d0d0d0;}
+.cm-s-ambiance .CodeMirror-linenumber{color:#d0d0d0!important;}
 
 </style>

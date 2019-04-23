@@ -27,7 +27,7 @@
             <el-dropdown trigger="hover">
               <span class="el-dropdown-link userinfo-inner">
                 <img src="../assets/images/default.jpg" />
-                <span id="username"></span>
+                <span id="username">{{ user }}</span>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <!-- <el-dropdown-item>我的消息</el-dropdown-item> -->
@@ -54,7 +54,8 @@
       data(){
         return{
           account: localStorage.getItem('account'),
-          data: sessionStorage.getItem('data')
+          data: sessionStorage.getItem('data'),
+          user: sessionStorage.getItem('user')
         }
       },
       mouted(){
@@ -80,12 +81,14 @@
                   localStorage.removeItem('account');
                   console.log(result);
                   if(result.code == 0){
+                    // this.$router.push('/');
                     location.href = "/";
                     // localStorage.removeItem('account');
                     return;
                   }
                 },
                 error: function (result) {
+                    // this.$router.push('/');
                     location.href = "/";
                     return;
                 }

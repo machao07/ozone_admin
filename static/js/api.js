@@ -18,11 +18,12 @@ function getLoginUser() {
             // sessionStorage.setItem("data", result.data);
             console.log(sessionStorage.getItem("data"));
             if (result.code == 0) {
+                sessionStorage.setItem("user", result.data.username);
                 // console.log(result.data.username);
                 $("#username").html(result.data.username);
             } else {
                 console.log(result);
-                // location.href = "/login";
+                // location.href = "#/login";
             }
         },
         error: function(result) {
@@ -43,9 +44,9 @@ function getLoginUser() {
 //     }
 // }
 
-function getParameter(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-    var r = window.location.search.substr(1).match(reg);
-    if (r != null) return unescape(r[2]);
-    return null;
-}
+// function getParameter(name) {
+//     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+//     var r = window.location.search.substr(1).match(reg);
+//     if (r != null) return unescape(r[2]);
+//     return null;
+// }

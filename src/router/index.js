@@ -15,7 +15,7 @@ import TestResult from '@/components/TestResult'
 Vue.use(Router)
 
 export default new Router({
-    mode: 'history',
+    // mode: 'history',
     routes: [{
             path: '/404',
             name: 'NotFound',
@@ -70,17 +70,14 @@ export default new Router({
                 showHomecontent: false
             },
             children: [{
-                path: '/Test',
+                path: '/test',
                 component: Test,
-                name: 'Test'
-                    // children: [
-                    //   {path:'/TestResult', component: TestResult, name: 'TestResult'}
-                    // ]
+                name: 'test'
             }]
         },
         {
-            path: '/TestResult',
-            name: 'TestResult',
+            path: '/testResult',
+            name: 'testResult',
             component: TestResult
         }
     ]
