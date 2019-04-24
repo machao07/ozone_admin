@@ -22,7 +22,7 @@
                 <el-button type="primary" style="width:100%;" @click.native.prevent="login()" :loading="logining">{{$t('login.btn')}}</el-button>
               </el-form-item>
               <el-form-item>
-                <p class="register" >{{$t('login.subtitle1')}}<router-link :to="{name: 'Register'}"><font color="#1E95FE">{{$t('login.subtitle2')}}</font></router-link></p>
+                <p class="register" >{{$t('login.subtitle1')}}<router-link :to="{path: '/register'}"><font color="#1E95FE">{{$t('login.subtitle2')}}</font></router-link></p>
               </el-form-item>
           </el-form>
           <div class="footer-wrapper">
@@ -36,6 +36,7 @@
 <script>
   import Language from '@/components/Language'
   import qs from 'qs'
+  import md5 from 'js-md5'
 
   export default {
     name: 'Login',
@@ -69,11 +70,21 @@
       
     },
     methods: {
+
       login() {
+        var account = $("#account").val();
+        var password = $("#password").val();
+
+        if(!account.endsWith("@mozi.one")){
+            password = md5(password);
+        }
         this.$refs.loginForm.validate((valid) => {
             if(valid){
                 this.logining = true;
-                let logindata = qs.stringify(this.loginForm);
+                let logindata = qs.stringify({
+                    account: this.loginForm.account,
+                    password: password
+                });
                 localStorage.setItem('account',this.loginForm.account);
                 localStorage.setItem('user',logindata);
                 console.log(localStorage.getItem('account'));
@@ -82,7 +93,7 @@
                 this.axios.post(apiurl + "/user/login",logindata)
                     .then((res) => {
                         console.log(res);
-                        // return;
+                        return;
                         if (res.data.code == 0) {
                             // this.$router.push('/')
                             location.href = "/";

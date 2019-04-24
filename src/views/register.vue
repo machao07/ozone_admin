@@ -35,7 +35,7 @@
                     <el-button type="primary" @click="register" :loading="registing" style="width:100%;">{{$t('register.btn')}}</el-button>
                 </el-form-item>
                 <el-form-item>
-                    <p class="login" @click="gotoLogin">{{$t('register.subtitle1')}}<font color="#1E95FE">{{$t('register.subtitle2')}}</font></p>
+                    <p class="login">{{$t('register.subtitle1')}}<router-link :to="{path: '/login'}"><font color="#1E95FE">{{$t('register.subtitle2')}}</font></router-link></p>
                 </el-form-item>
             </el-form>
             <div class="footer-wrapper">
@@ -49,6 +49,7 @@
 <script>
 import Language from '@/components/Language'
 import qs from 'qs'
+import md5 from 'js-md5'
 
 export default {
   name: "register",
@@ -120,7 +121,7 @@ export default {
             this.$alert("恭喜您，注册成功，请点击确定进行登录！",'提示',{
               confirmButtonText: '确定',
               callback: action => {
-                location.href="/login";
+                this.$router.push('/login');
               }
             });
             return;
@@ -128,12 +129,6 @@ export default {
             this.$alert(res.message)
         }
       })
-    },
-    // <!--进入登录页-->
-    gotoLogin() {
-      this.$router.push({
-        path: "/login"
-      });
     }
   }
 };

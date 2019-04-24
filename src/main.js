@@ -16,7 +16,6 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import qs from 'qs';
 
-
 Vue.use(ElementUI)
 Vue.use(ElementUI, { locale })
 Vue.use(canvas)
