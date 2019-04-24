@@ -43,7 +43,7 @@ export default {
       'Language': Language
     },
     data(){
-        var validatePass = (rule, value, callback) => {
+        let validatePass = (rule, value, callback) => {
             if (value === "") {
                 callback(this.$alert("请输入密码"));
             } else {
@@ -54,7 +54,7 @@ export default {
             }
         };
 
-        var validatePass2 = (rule, value, callback) => {
+        let validatePass2 = (rule, value, callback) => {
            if (value === "") {
             callback(this.$alert("请再次输入密码"));
           } else if (value !== this.changeForm.password) {
@@ -75,10 +75,12 @@ export default {
             //     { required: true, message: '请输入当前密码', trigger: 'blur' },
             // ],
             password: [
-                { required: true, message: '请输入新密码',validator: validatePass, trigger: 'blur' },
+                { required: true, message: '请输入新密码', trigger: 'blur' },
+                { validator: validatePass, trigger: 'blur' }
             ],
             repassword: [
-                { required: true, message: '请再次输入新密码',validator: validatePass2, trigger: 'blur' },
+                { required: true, message: '请再次输入新密码', trigger: 'blur' },
+                { validator: validatePass2, trigger: 'blur' }
             ]
         },
         checked: true

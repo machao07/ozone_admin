@@ -7,6 +7,7 @@ const cn = {
         'title': '系统登录',
         'nameholder': '请输入账号',
         'passholder': '请输入密码',
+        'verifycode': '请输入验证码',
         'subtitle1': '还没有账号？',
         'subtitle2': '立即注册'
     },

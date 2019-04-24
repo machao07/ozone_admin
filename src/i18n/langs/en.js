@@ -7,6 +7,7 @@ const en = {
         'title': 'System Login',
         'nameholder': 'Please enter your account number',
         'passholder': 'Please input a password',
+        'verifycode': 'Please enter the validation code',
         'subtitle1': 'No account yet? ',
         'subtitle2': 'Immediate registration'
     },

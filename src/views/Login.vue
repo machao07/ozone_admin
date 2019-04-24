@@ -16,11 +16,22 @@
               <el-form-item prop="password">
                   <el-input type="password" id="password" v-model="loginForm.password" auto-complete="off" :placeholder="$t('login.passholder')"></el-input>
               </el-form-item>
+
+              <!-- 验证码 -->
+              <el-form-item prop="verifycode">
+                  <el-input type="verifycode" id="verifycode" v-model="loginForm.verifycode" auto-complete="off" :placeholder="$t('login.verifycode')"></el-input>
+                  <div class="code" @click="refreshCode">
+                    <Identify :identifyCode="identifyCode"></Identify>
+                  </div>
+              </el-form-item>
+
               <!-- <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox> -->
               <el-form-item>
                 <!-- <el-button type="primary" style="width:48%;" @click.native.prevent="reset">重 置</el-button> -->
                 <el-button type="primary" style="width:100%;" @click.native.prevent="login()" :loading="logining">{{$t('login.btn')}}</el-button>
               </el-form-item>
+
+              <!-- 跳转注册 -->
               <el-form-item>
                 <p class="register" >{{$t('login.subtitle1')}}<router-link :to="{path: '/register'}"><font color="#1E95FE">{{$t('login.subtitle2')}}</font></router-link></p>
               </el-form-item>
@@ -34,21 +45,37 @@
 </template>
 
 <script>
-  import Language from '@/components/Language'
+  import Language from '@/components/Language'  
+  import Identify from '@/components/Identify'
   import qs from 'qs'
   import md5 from 'js-md5'
 
   export default {
     name: 'Login',
     components:{
-      'Language': Language
+      'Language': Language,
+      'Identify': Identify
     },
     data() {
+      let validateCode = (rule, value, callback) => {
+          if (this.identifyCode !== value) {
+              this.loginForm.verifycode = '';
+              callback(this.$alert('请输入正确的验证码',{
+                callback: action => {
+                    this.refreshCode();
+                }
+              }))
+          } else {
+              callback()
+          }
+      }
       return {
         logining: false,
+        identifyCode: '',
         loginForm: {
           account: '', 
-          password: '' 
+          password: '',
+          verifycode: ''
         },
         loginFormRules: {
           account: [
@@ -56,12 +83,18 @@
           ],
           password: [
             { required: true, message: '请输入密码', trigger: 'blur' },
+          ],
+          verifycode: [
+              { required: true, message: '请输入验证码', trigger: 'blur' },
+              { validator: validateCode, trigger: 'blur' }
           ]
         },
         checked: true
       };
     },
     mounted(){
+      this.identifyCode = '';
+      this.makeCode(this.identifyCode);
       // this.$nextTick(() => {
       //   this.getLoginUser();
       // })
@@ -70,7 +103,23 @@
       
     },
     methods: {
-
+      //图形验证
+      randomNum(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+      },
+      refreshCode() {
+        this.identifyCode = "";
+        this.makeCode();
+      },
+      makeCode() {
+        this.axios.get(apiurl + "/getcode")
+        .then(res => {
+          // console.log(res);
+          this.identifyCode = res.data.data;
+          console.log(this.identifyCode);
+        })
+      },
+      //登录验证
       login() {
         var account = $("#account").val();
         var password = $("#password").val();
@@ -83,7 +132,8 @@
                 this.logining = true;
                 let logindata = qs.stringify({
                     account: this.loginForm.account,
-                    password: password
+                    password: password,
+                    code: this.loginForm.verifycode
                 });
                 localStorage.setItem('account',this.loginForm.account);
                 localStorage.setItem('user',logindata);
@@ -93,10 +143,10 @@
                 this.axios.post(apiurl + "/user/login",logindata)
                     .then((res) => {
                         console.log(res);
-                        return;
+                        // return;
                         if (res.data.code == 0) {
-                            // this.$router.push('/')
-                            location.href = "/";
+                            this.$router.push('/')
+                            // location.href = "/";
                         } else {
                             // alert(res.message);
                             this.logining = false;
@@ -126,4 +176,14 @@
         padding: 2rem 3rem 0rem 3rem;
     }
 
+    .code{
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 5;
+      /* width: 102px;  */
+      height: 40px; 
+      background: #e2e2e2;
+      margin: 0;
+    }
 </style>

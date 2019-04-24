@@ -235,7 +235,9 @@
                 this.total = res.data.data.totalElements;
                 this.listLoading = false;
 
-          }).catch(error => {})
+          }).catch(error => {
+            this.$router.push("/login");
+          })
       },
       // 单行删除
       handleDelete(index){
